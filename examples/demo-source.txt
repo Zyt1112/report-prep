@@ -1,0 +1,4 @@
+DEMONSTRATION DATA ONLY — NOT A SCIENTIFIC SOURCE.
+This file exists to test evidence references and deterministic rendering.
+At 25 °C, the transition life was 24845 cycles.
+At 250 °C, the transition life was 48555 cycles.

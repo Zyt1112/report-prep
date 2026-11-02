@@ -2,12 +2,9 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>讲解稿模板</title>
-<!--
-用法：复制本文件 → 改 title 与正文 → 保存为「NN_第X篇_讲解稿.html」。
-十一节骨架见 SKILL.md，语域规则见 references/register.md。
-删掉不需要的节时，同步调整自测五问与边界。
--->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<!-- Render with scripts/render_html.py; do not hand-edit generated evidence values. -->
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #ECEBE6; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #1A1A1A; }
@@ -21,138 +18,38 @@
   h2 span { font-size: 8.4pt; color: #8A6A3B; font-weight: 400; letter-spacing: 1px; margin-left: 6px; }
   h3 { font-size: 10.2pt; margin: 10px 0 3px; color: #0F2A44; }
   p { font-size: 9.9pt; line-height: 1.86; margin-bottom: 6px; text-align: justify; }
-  b { color: #0F2A44; }
   table { width: 100%; border-collapse: collapse; margin: 6px 0 8px; }
   th, td { border: 1px solid #CFD6DE; padding: 4px 6px; font-size: 8.7pt; line-height: 1.55;
            vertical-align: top; text-align: left; }
   th { background: #EEF2F7; font-weight: 700; font-size: 8.8pt; }
-  td.c { text-align: center; }
   .why { background: #F6F8FB; border-left: 3px solid #1F3B57; padding: 7px 11px; font-size: 9.3pt;
          line-height: 1.78; margin: 7px 0 9px; }
   .key { background: #FBF3E4; border-left: 3px solid #8A6A3B; padding: 7px 11px; font-size: 9.6pt;
          line-height: 1.8; margin: 8px 0; }
   .profile { border: 1px solid #DDE2E9; background: #FAFBFC; padding: 7px 10px; font-size: 8.5pt;
              line-height: 1.7; color: #4A5568; margin-bottom: 4px; }
-  .small { font-size: 8.5pt; color: #5C5C63; line-height: 1.75; }
   ol, ul { margin: 3px 0 7px 18px; }
   li { font-size: 9.7pt; line-height: 1.8; margin-bottom: 3px; text-align: justify; }
   .foot { margin-top: 16px; padding-top: 6px; border-top: 1px solid #DCDCD4; font-size: 8.2pt;
-          color: #8B8B85; display: flex; justify-content: space-between; }
+          color: #66665F; display: flex; justify-content: space-between; }
   @media print {
     body { background: #fff; }
     .page { margin: 0; box-shadow: none; width: auto; padding: 0; }
     @page { size: A4; margin: 16mm 17mm 14mm; }
-    h2 { page-break-after: avoid; }
-    table, .why, .key { page-break-inside: avoid; }
+    h2 { break-after: avoid; page-break-after: avoid; }
+    table, .why, .key { break-inside: avoid; page-break-inside: avoid; }
   }
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="kicker">第 X 篇 · 讲 解 稿</div>
-  <h1>【一句话标题：材料 + 变量 + 方法】</h1>
-  <div class="sub">读者设定：【学历背景 + 缺哪块基础 + 能看懂什么】｜用途：先看懂，再自己整理成汇报</div>
-  <div class="profile">
-    <b>论文档案</b>　【作者、单位】<br>
-    <i>【英文标题】</i>，【期刊 卷 (年) 页码】
-  </div>
+  <div class="kicker">{{KICKER}}</div>
+  <h1>{{TITLE}}</h1>
+  <div class="sub">{{SUBTITLE}}</div>
+  {{PROFILE_BLOCK}}
   <div class="rule"></div>
-
-  <h2>一、先给结论<span>看完这一节，就知道全文值不值得读</span></h2>
-  <p>【三句话：拆开了什么变量 / 发现了什么坎 / 证明了什么能力】</p>
-  <div class="key"><b>但第三句有个前提：</b>【结论成立的条件。没有这句，后面的外推会被误读。】</div>
-
-  <h2>二、它站在哪儿<span>零件、材料、工况、缺口</span></h2>
-  <h3>零件</h3>
-  <p>【工况画面 + 为什么是低周/高周。定义要给判据，不要给"力大力小"】</p>
-  <h3>材料</h3>
-  <p>【为什么用这个材料：三条实在的理由，含成分与热处理】</p>
-  <h3>缺口</h3>
-  <p>【别人做到哪一步，缺的是哪一块。这一段决定论文的位置】</p>
-
-  <h2>三、问题与难点<span>为什么这件事不好做</span></h2>
-  <p>【问题一句 + 难点：通常是多个变量同时变，无法归因】</p>
-  <table>
-    <thead><tr><th style="width:16%">温度 / ℃</th><th>σ<sub>UTS</sub></th><th>σ<sub>y</sub></th><th>E</th><th>其他</th></tr></thead>
-    <tbody>
-      <tr><td class="c">25</td><td class="c">—</td><td class="c">—</td><td class="c">—</td><td class="c">—</td></tr>
-      <tr><td class="c">450</td><td class="c">—</td><td class="c">—</td><td class="c">—</td><td class="c">—</td></tr>
-    </tbody>
-  </table>
-  <div class="why"><b>易漏的逻辑：</b>【把"变量怎么作用到结果上"的中间环节写出来。这一段决定后面各节能不能串成一条链。】</div>
-
-  <h2>四、实验设计<span>矩阵不是多做题，是为了能归因</span></h2>
-  <table>
-    <thead><tr><th style="width:16%">维度</th><th style="width:34%">取值</th><th>为什么取这几个点</th></tr></thead>
-    <tbody>
-      <tr><td>—</td><td>—</td><td>—</td></tr>
-    </tbody>
-  </table>
-  <p><b>锁死清单：</b>【材料批次 / 热处理 / 表面 / 速率 / 波形 / 引伸计 / 终止判据】</p>
-  <div class="why"><b>为什么要锁死：</b>可比是矩阵的前提。一格偏了，前面拆变量的功夫全白费。</div>
-
-  <h2>五、实验流程<span>这些参数可以直接抄成实验清单</span></h2>
-  <table>
-    <thead><tr><th style="width:5%">序</th><th style="width:15%">环节</th><th style="width:44%">具体做法</th><th>这一步的道理</th></tr></thead>
-    <tbody>
-      <tr><td class="c">1</td><td>材料与热处理</td><td>—</td><td>—</td></tr>
-      <tr><td class="c">2</td><td>试样加工</td><td>按 【标准号】</td><td>—</td></tr>
-      <tr><td class="c">3</td><td>表面制备</td><td>—</td><td>—</td></tr>
-      <tr><td class="c">4</td><td>设备与测量</td><td>—</td><td>—</td></tr>
-      <tr><td class="c">5</td><td>升温与保温</td><td>—</td><td>—</td></tr>
-      <tr><td class="c">6</td><td>加载</td><td>—</td><td>—</td></tr>
-      <tr><td class="c">7</td><td>终止判据</td><td>—</td><td>—</td></tr>
-      <tr><td class="c">8</td><td>表征</td><td>—</td><td>—</td></tr>
-    </tbody>
-  </table>
-
-  <h2>六、三个关键动作<span>做错一个，这一格数据就废了</span></h2>
-  <h3>① 【动作】</h3>
-  <p>【两层作用：直接影响 + 会不会污染主变量】</p>
-  <h3>② 【动作】</h3>
-  <p>【为什么不能用另一种做法：给出替代方案的坏处】</p>
-  <h3>③ 【动作】</h3>
-  <p>【为什么取这个判据：可观测、可重复、与另一种比更稳】</p>
-  <div class="why"><b>这类"把不可测换成可测"的处理，是实验设计的功力所在。</b></div>
-
-  <h2>七、结果之一<span>材料怎么回应折腾</span></h2>
-  <p>【曲线层：有无异常、趋势、早期预判】</p>
-  <div class="why"><b>枢纽型概念要单独讲清它连接了哪两件事。</b></div>
-
-  <h2>八、结果之二<span>显微镜下发生了什么</span></h2>
-  <p>【机制证据：两条独立手段互印，单一手段会被质疑】</p>
-
-  <h2>九、结果之三<span>核心结论与量化</span></h2>
-  <table>
-    <thead><tr><th style="width:14%">温度 / ℃</th><th>参数 1</th><th>参数 2</th><th>参数 3</th><th>导出量</th></tr></thead>
-    <tbody>
-      <tr><td class="c">—</td><td class="c">—</td><td class="c">—</td><td class="c">—</td><td class="c">—</td></tr>
-    </tbody>
-  </table>
-  <div class="why"><b>排他性论证：</b>为什么是 A 机制而不是 B？必须给三个可检验的否证。</div>
-
-  <h2>十、边界与用处<span>哪里不能搬，你能抄什么</span></h2>
-  <ol>
-    <li>【温度/参数分辨率】</li>
-    <li>【加载条件】</li>
-    <li>【环境】</li>
-    <li>【试样几何】</li>
-    <li>【重复数与统计效力】</li>
-  </ol>
-  <p><b>可以直接抄的：</b>【设计思路 / 制备流程 / 判据定义方式 / 低成本预判】</p>
-  <p><b>必须改的：</b>【按你的工况改哪几项】</p>
-
-  <h2>十一、自测五问<span>能答上来，这篇就算读通了</span></h2>
-  <ol>
-    <li>—</li>
-    <li>—</li>
-    <li>—</li>
-    <li>—</li>
-    <li>—</li>
-  </ol>
-  <p class="small"><b>参考思路：</b>—</p>
-
-  <div class="foot"><span>【项目名】 · 第 X 篇讲解稿</span><span>03 / 05</span></div>
+  {{SECTIONS}}
+  <div class="foot"><span>{{FOOTER}}</span><span>{{PAGE_LABEL}}</span></div>
 </div>
 </body>
 </html>

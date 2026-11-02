@@ -1,122 +1,123 @@
 # report-prep · 汇报前准备
 
-> 仓库地址：https://github.com/Zyt1112/report-prep
+> 仓库：https://github.com/Zyt1112/report-prep
 
-把论文转成能讲出去的材料。不生成"摘要"，生成**一条能顺着讲下来的链**。
+把论文、技术资料或现有汇报组织成**一条能讲、能问、能回溯证据的链**。支持讲解稿、讲述提纲、PPT 结构、PPT 制作、逐页详解和模拟追问，也支持只修复现有材料的页序与逻辑。
 
-适用于：组会汇报、导师一对一、文献精读汇报、开题/答辩预演。
+优先服务实验、建模、仿真、器件/方法设计类工科材料；不符合这些类型时按真实问题链自定义，不强套模板。
 
----
+## v1.2 的变化
 
-## 它解决的问题
-
-汇报做不好，多半不是知识不够，是三处结构病：
-
-| 病 | 症状 | 处方 |
-|---|---|---|
-| **名词标题病** | 页标题是"研究背景""实验方法""结论" | 名词没有时序，翻页只是"换一类内容"。改成问句，标题就是这一页要答的事 |
-| **结论后置病** | 前三页铺背景，第五页才说发现什么 | 结论先行，后面全是证据 |
-| **数据无归属病** | 数字列了一堆，不说从哪一步来、干什么用 | 每页标"依据：步骤 0X"，结论能倒推回操作 |
-
-还有一条更根本的：**跳过讲解稿直接做 PPT，必然做出并列式结构**。所以这个技能强制先写讲解稿。
-
----
-
-## 五步流程
-
-```
-论文 PDF
-  ↓ ① 讲解稿      讲给"要去讲的那个人"本人，保留公式、单位、原文数据
-  ↓ ② 讲述提纲    压成 6–8 拍，附"讲解稿 N 节 → 提纲 M 拍"压缩关系表
-  ↓ ③ PPT 结构    7–9 页，标题是问句，页底有承接句  ← 用户确认这一层才往下
-  ↓ ④ PPT
-  ↓ ⑤ 逐页详解    每页讲什么、为什么这么讲、会被追问什么
-```
-
----
+- 增加四种任务入口，不再要求所有请求都从长讲解稿开始。
+- 统一“问句标题 + 核心结论句”和第一张内容页结论先行规则。
+- 页数、拍数改为由时长与必要问题数决定，取消七页下限。
+- 区分多篇独立、多篇综合和论文对比三种模式。
+- 新增证据台账、来源数字令牌和一致性检查。
+- 新增 JSON 驱动 HTML 渲染、逐页详解、模拟追问和 Visual–Claim 绑定。
+- 新增器件/方法设计类骨架、阶段资源路由和 WorkBuddy 环境适配。
+- 升级 HTML 结构校验并增加自动化测试。
 
 ## 安装
 
-三种方式，选一种。
+将整个目录复制到任一位置：
 
-**方式一：直接拷目录（最快）**
-
-把 `report-prep/` 整个目录复制到：
-
-```
-~/.workbuddy/skills/report-prep/        # 用户级，所有工作区可用
-<项目>/.workbuddy/skills/report-prep/    # 项目级，仅该项目
+```text
+~/.workbuddy/skills/report-prep/        # 用户级
+<项目>/.workbuddy/skills/report-prep/    # 项目级
 ```
 
-Windows 上 `~` 是 `C:\Users\<你的用户名>`。
-
-**方式二：从 zip 装**
-
-解压 `report-prep.zip`，同样把 `report-prep/` 放进上面任一位置。
-
-**方式三：clone 后拷**
+也可以克隆：
 
 ```bash
 git clone https://github.com/Zyt1112/report-prep.git
 cp -r report-prep ~/.workbuddy/skills/
 ```
 
-装完重开一个会话即可生效，触发词见下。
+Windows 上 `~` 通常为 `C:\Users\<用户名>`。安装后新开会话即可使用。
 
----
+## 用法示例
 
-## 用法
+- “帮我把这篇论文讲明白，我要跟导师汇报。”
+- “只要讲述提纲，15 分钟组会，听众是大同行。”
+- “这份现有 PPT 页与页之间没关联，直接诊断并重排，不要重写讲解稿。”
+- “先出 PPT 结构让我确认，确认后再做 PPT 和逐页追问。”
+- “对比这三篇论文的假设、证据和边界，不要分别做三份摘要。”
 
-直接说需求即可，会自动触发：
+也可以显式调用：`/report-prep 精读这篇，出一套汇报材料`。
 
-- "帮我把这篇论文讲明白，我要跟导师汇报"
-- "组会要讲这篇，做个讲解稿"
-- "PPT 页与页之间没关联，帮我重排结构"
-- "汇报前准备一下，先出提纲我看看"
+## 标准流程
 
-也可以显式指定：`/report-prep 精读这篇，出一套汇报材料`。
-
----
-
-## 目录结构
-
-```
-report-prep/
-├── SKILL.md                  # 主文件：诊断表、五步流程、三条铁律、骨架模板
-├── references/
-│   ├── register.md           # 语域规则 + 五组正反例（同一条内容三种写法）
-│   ├── structure.md          # 承接句三种写法、标题改写对照、压缩关系表
-│   ├── deck-skeletons.md     # 三套骨架：实验类 / 建模类 / 仿真类（7–9 页）
-│   └── pipeline.md           # PDF 提取 → A4 HTML → PPT 的技术命令与踩坑
-├── assets/
-│   ├── explainer.html        # 讲解稿模板（十一节，改文字即用）
-│   └── outline.html          # 提纲模板（七拍卡片 + 压缩关系表）
-├── scripts/
-│   └── check_html.py         # 交付前校验：标签闭合、裸 &、表格 thead、篇幅
-└── examples/
-    └── 12Cr13-ppt-outline.html   # 一份填好的实例（七页问句结构长什么样）
+```text
+0 任务卡与材料盘点
+  ↓
+1 讲解稿（可独立交付）
+  ↓
+2 讲述提纲 + 压缩关系表
+  ↓
+3 PPT 结构：问句标题 + 核心结论 + 证据 + 视觉绑定
+  ↓ 用户确认
+4 PPT 制作与逐页渲染检查
+  ↓
+5 逐页详解 + 模拟追问
 ```
 
----
+修复现有材料时可直接进入步骤 3；用户只要中间产物时做到该层即停。
 
-## 三条铁律
+## 可复现 HTML 工作流
 
-1. **讲解稿写给"要去讲的那个人"，不是写给听众。** 中间隔着一次转述。写成给听众的版本，人只会照着念；写成给本人的版本，他理解后能自己组织语言。
-2. **一页只回答一个问题，页底必须留钩子。** 自检：只读七个标题，能顺念成一段话就成立。
-3. **数字必须回原文核对。** 不估算、不凭记忆、不从别的论文借。双栏 PDF 提取后段落会错乱，引用前必须按关键词 grep 定位。
-
----
-
-## 配套校验脚本
+来源数字放入证据 JSON，在内容 JSON 中用 `{{E001}}` 引用：
 
 ```bash
-python scripts/check_html.py 交付文件.html
+python scripts/check_numbers.py examples/evidence.json examples/outline.content.json
+python scripts/render_html.py examples/outline.content.json \
+  --evidence examples/evidence.json -o outline.generated.html
+python scripts/check_html.py outline.generated.html
 ```
 
-检查标签闭合、裸 `&`、表格是否带 `thead`、`@page` 打印样式、篇幅统计。退出码非 0 表示有问题。
+讲解稿使用 `examples/explainer.content.json`，渲染器会按 `kind` 自动选择模板。
 
----
+**自动数字检查只保证已声明的引用、状态和显示值一致，不替代人工回 PDF 核对。** HTML 校验通过后仍需实际打开并检查打印预览。
+
+## 自动化测试
+
+只依赖 Python 3 标准库：
+
+```bash
+python -m unittest discover -s tests -v
+python scripts/check_html.py assets/explainer.html assets/outline.html --allow-placeholders
+```
+
+## 目录
+
+```text
+report-prep/
+├── SKILL.md
+├── references/
+│   ├── register.md
+│   ├── structure.md
+│   ├── deck-skeletons.md
+│   ├── evidence.md
+│   ├── page-notes.md
+│   ├── ppt-build.md
+│   └── pipeline.md
+├── assets/
+│   ├── explainer.html
+│   ├── outline.html
+│   └── content.schema.json
+├── scripts/
+│   ├── render_html.py
+│   ├── check_numbers.py
+│   └── check_html.py
+├── examples/
+│   ├── demo-source.txt
+│   ├── evidence.json
+│   ├── explainer.content.json
+│   ├── outline.content.json
+│   └── 12Cr13-ppt-outline.html
+└── tests/
+    └── test_scripts.py
+```
 
 ## 许可
 
-MIT。见 [LICENSE](LICENSE)。
+MIT，见 [LICENSE](LICENSE)。

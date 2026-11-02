@@ -1,110 +1,82 @@
-# 技术流水线：从 PDF 到可交付文件
+# 技术流水线：从材料到可复现交付
 
-## 一、PDF 文本提取
+## 一、前置检查
 
-Windows 环境用内置的 `workbuddy-pdf`：
+先确认原文、补充材料、图表和已有汇报是否可读。记录缺失页、扫描质量、无法提取的表格和需要人工查看的图。任何缺失都进入任务卡，不用猜测掩盖。
+
+## 二、PDF 提取与原文核对
+
+在 WorkBuddy 中优先调用官方 `workbuddy-pdf` 技能；其他环境使用当前可用的 PDF 解析器。不要写死某台机器的安装路径。
+
+- Markdown 适合保留标题层级，纯文本适合关键词检索。
+- 双栏论文可能出现栏序错乱、表格混行和公式拆分，引用前必须回到页面对照。
+- 图表数值应同时检查坐标、单位、图注和表头，不能只匹配数字字符串。
+- 扫描件需要 OCR 或页面图像核对；低置信度内容标为待确认。
+
+检索时使用当前环境提供的专用搜索工具；没有专用工具时再使用 `grep` 等命令。检索定位不等于完成原文核对。
+
+## 三、建立证据与内容 JSON
+
+1. 按 `references/evidence.md` 建 `evidence.json`。
+2. 将来源数字写为 `{{E001}}` 令牌，并人工回到 PDF 核对。
+3. 按 `examples/*.content.json` 建讲解稿或讲述提纲的内容 JSON。
+4. 先检查数字引用，再渲染 HTML。
 
 ```bash
-sh "D:/WorkBuddy/resources/app.asar.unpacked/resources/plugins/workbuddy-builtin/skills/workbuddy-pdf/scripts/run.sh" \
-   "论文.pdf" "out.md" -f md -q
+python scripts/check_numbers.py evidence.json content.json
+python scripts/render_html.py content.json --evidence evidence.json -o deliverable.html
+python scripts/check_html.py deliverable.html
 ```
 
-- `-f md` 保留标题层级；`-f txt` 更干净但丢结构
-- 产物落到工作区临时目录（如 `pdfmd/`），同一批论文统一命名：`p<简称>.md`
+`render_html.py` 只使用 Python 标准库，自动选择 `assets/explainer.html` 或 `assets/outline.html`，转义文本并注入证据显示值。模板中的 `{{...}}` 是渲染占位符，不应直接作为最终交付件。
 
-### 双栏论文的坑（必须知道）
+数字脚本的通过含义是：**声明的证据引用和显示值一致**。它不证明 OCR、人工录入或原文解读一定正确。
 
-双栏排版提取后，**段落顺序会错乱**：左栏下半段可能跑到右栏上半段后面，表格数字会和正文混行。
+## 四、A4 HTML
 
-引用前必须按关键词定位核对，不要按行号顺序读：
-
-```bash
-grep -n -o -E ".{0,80}(ASTM|gauge length|thermocouple|quenched).{0,160}" p12cr13.md
-grep -n -E "Table [0-9]|Conclusion" p12cr13.md
-```
-
-看表格时优先搜数字串（`551.83`、`24845`），比搜单位可靠。
-
-## 二、A4 HTML 交付件
-
-### 必须的骨架
+模板包含以下打印基础样式：
 
 ```html
-<style>
-  .page { width: 210mm; padding: 18mm 20mm 16mm; background: #fff; margin: 16px auto; }
-  @media print {
-    body { background: #fff; }
-    .page { margin: 0; box-shadow: none; width: auto; padding: 0; }
-    @page { size: A4; margin: 16mm 17mm 14mm; }
-    h2 { page-break-after: avoid; }
-    table, .why, .key { page-break-inside: avoid; }
-  }
-</style>
+@media print {
+  body { background: #fff; }
+  .page { margin: 0; box-shadow: none; width: auto; padding: 0; }
+  @page { size: A4; margin: 16mm 17mm 14mm; }
+  h2 { break-after: avoid; page-break-after: avoid; }
+  table, .why, .key { break-inside: avoid; page-break-inside: avoid; }
+}
 ```
 
-### 版式取值（已验证可读）
+- 正文使用 Unicode 数学符号，负号使用 U+2212。
+- 内容 JSON 中的文本按纯文本转义；需要上下标时使用 Unicode 上下标，不注入原始 HTML。
+- HTML 校验通过后仍要实际打开并检查打印预览；脚本不能发现所有分页和视觉溢出问题。
 
-| 元素 | 字号 / 行高 |
-|---|---|
-| 正文 | 9.9–10pt / 1.85 |
-| 表格 | 8.7pt / 1.55，表头浅底 `#EEF2F7` |
-| 章节标题 h2 | 12pt，左侧 4px 竖线 `#1F3B57` |
-| 说明框 | 9.3pt / 1.78，浅底 `#F6F8FB` + 左侧竖线 |
-| 核心结论框 | 9.6pt / 1.8，米色底 `#FBF3E4` + 棕色竖线 `#8A6A3B` |
-| 页脚 | 8.2pt，`#8B8B85` |
-
-配色：主色 `#1F3B57`（深蓝）、强调 `#8A6A3B`（棕）、正文 `#1A1A1A`。三色足够，不要再加。
-
-### 中文排版注意
-
-- HTML 属性用 ASCII 直引号；正文中文引号用「」或""
-- 数学符号直接写 Unicode：σ、ε、Δ、±、℃、×10⁻³、−（负号用 U+2212 而非连字符）
-- 上下标用 `<sub>` / `<sup>`，不要用下划线模拟
-
-### 交付前校验
+检查模板本身时可允许占位符：
 
 ```bash
-python scripts/check_html.py 交付文件.html
+python scripts/check_html.py assets/explainer.html assets/outline.html --allow-placeholders
 ```
 
-检查标签闭合、裸 `&`、表格是否有 `thead/tbody`、统计字数与表格数。
+## 五、PPT 制作
 
-## 三、PPT（可选，需 slidep）
+在 WorkBuddy 中统一走官方 `workbuddy-pptx` 技能。其他工具只作为可选适配器，先确认命令、版本和输入格式，不把某个内部命令当成所有环境的必需品。
 
-```bash
-export SWC_NATIVE_BINDING_CACHE="C:\\ProgramData\\swc-cache"
-slidep create "deck.pptx"
-slidep upsert-dsl "deck.pptx" --dsl-file "slides/01.slide" --page-index 0
-slidep lint "deck.pptx" --dsl-file "slides/01.slide" --page-index 0
-```
+每页按以下闭环执行：
 
-### 三个坑
+1. 从确认后的结构提纲读取标题、核心结论、证据和视觉绑定。
+2. 制作页面并保存源文件。
+3. 检查溢出、遮挡、字体、图表数值和页脚。
+4. 更新对应的逐页详解与模拟追问。
+5. 通过后再进入下一页。
 
-1. **`SWC_NATIVE_BINDING_CACHE` 必须设**。`@swc` 原生绑定会校验缓存目录 ACL，若 `C:\Users\<name>` 对 Everyone 开放，加载会失败。做法：建 `C:\ProgramData\swc-cache`，ACL 只留 SYSTEM + 本人。
-2. **JSX 文本里不能出现 `<` 和 `>`**。写成"10% 内""D 超过 0.3"，否则 upsert 静默失败、页面不落盘。
-3. **safe-delete 会拦截删除**，且 PPT 常被编辑器占用。覆盖用「原位 upsert 补页」，不要删文件重建。
+全部完成后核对页数、页序和标题链，并实际渲染或打开 PPT 检查。不要只凭源文件存在就宣称 PPT 已成功生成。
 
-### 页序核对
+## 六、Word 与其他格式
 
-```python
-import zipfile, re
-z = zipfile.ZipFile("deck.pptx")
-names = sorted([n for n in z.namelist() if re.match(r"ppt/slides/slide\d+\.xml$", n)],
-               key=lambda x: int(re.findall(r"\d+", x)[0]))
-for n in names:
-    x = z.read(n).decode("utf-8")
-    print(n, re.findall(r"<a:t>([^<]*)</a:t>", x)[0][:30])
-```
+在 WorkBuddy 中需要 `.docx` 时走官方 `workbuddy-docx` 路由；需要编辑现有 Office 文件时使用对应的本地编辑能力。不要在不了解当前工具链时写死转换脚本路径。
 
-## 四、Word 交付（可选）
+## 七、文件与来源工程
 
-若需 .docx，走 `workbuddy-docx` 插件，不要用 python-docx 手搓：
-
-1. S2 排版：产出 HTML，需过 `review_html.py` 门禁（单文档仅一个 `h1`、表格必须有 `thead/tbody`、样式值走 CSS 变量）
-2. S3 转换：`convert_doc.py` 转 docx，自动加目录域与页码域
-
-## 五、文件与记忆
-
-- 交付件一律放用户桌面，用户会直接双击打开
-- 工作区保留源工程（模板 + 内容 JSON/脚本），便于批量改版
-- 每次实质工作后追加到 `.workbuddy/memory/YYYY-MM-DD.md`，只记结论与坑，不记过程
+- 输出到用户指定目录或当前工作区，不强制写桌面。
+- 保留内容 JSON、证据 JSON、模板版本和生成文件，便于复改。
+- 不覆盖用户已有文件；同名输出使用清晰的新版本名。
+- 对外分享前检查原文图片、未公开数据和引用材料的授权与隐私要求。

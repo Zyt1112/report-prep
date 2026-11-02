@@ -1,0 +1,42 @@
+{
+  "kind": "explainer",
+  "title": "示例：温度与过渡寿命",
+  "kicker": "格式示例 · 讲 解 稿",
+  "subtitle": "仅演示证据引用与 HTML 渲染；数据来自 demo-source.txt，不是科研论文。",
+  "profile": "示例材料 | 所有数值均为演示数据",
+  "sections": [
+    {
+      "title": "一、先给结论",
+      "note": "核心判断与边界",
+      "blocks": [
+        {
+          "type": "key",
+          "text": "演示数据中，25 ℃ 的过渡寿命为 {{E001}} cycles，250 ℃ 为 {{E002}} cycles。"
+        },
+        {
+          "type": "paragraph",
+          "text": "这两个数只用于演示单一证据源如何进入不同交付物，不构成科学结论。"
+        }
+      ]
+    },
+    {
+      "title": "二、证据与边界",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["条件", "过渡寿命 / cycles", "证据"],
+          "rows": [
+            ["25 ℃", "{{E001}}", "demo-source.txt，line 3"],
+            ["250 ℃", "{{E002}}", "demo-source.txt，line 4"]
+          ]
+        },
+        {
+          "type": "why",
+          "text": "正式使用时必须回到真实 PDF 核对数值、单位、条件和上下文。"
+        }
+      ]
+    }
+  ],
+  "footer": "report-prep · 可复现渲染示例",
+  "page_label": "DEMO"
+}

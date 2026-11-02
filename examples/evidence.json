@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "id": "E001",
+      "display": "24,845",
+      "value": 24845,
+      "unit": "cycles",
+      "source": "demo-source.txt",
+      "locator": "line 3",
+      "quote": "At 25 °C, the transition life was 24845 cycles.",
+      "status": "verified",
+      "kind": "demo",
+      "note": "Demonstration only; not a scientific source."
+    },
+    {
+      "id": "E002",
+      "display": "48,555",
+      "value": 48555,
+      "unit": "cycles",
+      "source": "demo-source.txt",
+      "locator": "line 4",
+      "quote": "At 250 °C, the transition life was 48555 cycles.",
+      "status": "verified",
+      "kind": "demo",
+      "note": "Demonstration only; not a scientific source."
+    }
+  ]
+}

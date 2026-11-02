@@ -1,88 +1,200 @@
 #!/usr/bin/env python3
-"""交付前校验 A4 HTML：标签闭合、裸 &、表格结构、篇幅统计。
+"""Validate generated A4 HTML with structural parsing and scoped diagnostics.
 
-用法：
-    python check_html.py 文件1.html [文件2.html ...]
-    python check_html.py *.html
+Usage:
+    python scripts/check_html.py file1.html [file2.html ...]
+    python scripts/check_html.py assets/*.html --allow-placeholders
 
-退出码：0 全部通过；1 存在问题。
+Exit code 1 is reserved for errors. Warnings do not fail the check.
+Only Python's standard library is required.
 """
-import io
+
+import argparse
+from html import entities
+from html.parser import HTMLParser
+from pathlib import Path
 import re
 import sys
 
-# 这些标签允许自闭合或成对，检查时按出现次数比对开闭
-PAIRED = ["html", "head", "body", "style", "div", "table", "thead", "tbody",
-          "tr", "th", "td", "p", "ol", "ul", "li", "h1", "h2", "h3", "h4",
-          "span", "b", "i", "em", "strong", "sub", "sup", "title"]
-
-VOID = ["br", "hr", "img", "meta", "link", "input"]
+VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+PLACEHOLDER = re.compile(r"\{\{[^{}]+\}\}")
+BRACKET_PLACEHOLDER = re.compile(r"【[^】]*】")
 
 
-def check(path):
-    s = io.open(path, encoding="utf-8").read()
-    problems = []
+class AuditParser(HTMLParser):
+    def __init__(self, allow_placeholders=False):
+        super().__init__(convert_charrefs=False)
+        self.allow_placeholders = allow_placeholders
+        self.errors = []
+        self.warnings = []
+        self.stack = []
+        self.tables = []
+        self.completed_tables = []
+        self.style_depth = 0
+        self.script_depth = 0
+        self.style_parts = []
+        self.text_parts = []
+        self.h2_count = 0
+        self.box_count = 0
+        self.has_lang = False
+        self.has_charset = False
+        self.has_doctype = False
 
-    # 1) 标签闭合
-    for t in PAIRED:
-        opened = len(re.findall(r"<%s[\s>]" % t, s, re.I))
-        closed = len(re.findall(r"</%s>" % t, s, re.I))
-        if opened != closed:
-            problems.append("标签不闭合 <%s>：开 %d / 闭 %d" % (t, opened, closed))
+    def line_message(self, message):
+        return "line %d: %s" % (self.getpos()[0], message)
 
-    # 2) 裸 & （HTML 实体除外）
-    raw_amp = re.findall(r"&(?!amp;|lt;|gt;|nbsp;|quot;|#\d+;|#x[0-9a-fA-F]+;)", s)
-    if raw_amp:
-        problems.append("裸 & 共 %d 处，应写成 &amp;" % len(raw_amp))
+    def handle_decl(self, decl):
+        if decl.lower().startswith("doctype html"):
+            self.has_doctype = True
 
-    # 3) 表格必须有 thead
-    tables = re.findall(r"<table[\s>].*?</table>", s, re.S | re.I)
-    no_head = sum(1 for t in tables if "<thead" not in t.lower())
-    if no_head:
-        problems.append("%d 张表缺 <thead>（Word 转换与打印会丢表头）" % no_head)
+    def handle_starttag(self, tag, attrs):
+        tag = tag.lower()
+        attributes = dict(attrs)
+        if tag == "html" and attributes.get("lang"):
+            self.has_lang = True
+        if tag == "meta" and (attributes.get("charset") or attributes.get("http-equiv", "").lower() == "content-type"):
+            self.has_charset = True
+        if tag == "style":
+            self.style_depth += 1
+        if tag == "script":
+            self.script_depth += 1
+        if tag == "h2":
+            self.h2_count += 1
+        classes = attributes.get("class", "").split()
+        if "why" in classes or "key" in classes:
+            self.box_count += 1
+        if tag == "table":
+            self.tables.append({"thead": 0, "tbody": 0, "line": self.getpos()[0]})
+        elif tag in {"thead", "tbody"} and self.tables:
+            self.tables[-1][tag] += 1
+        if tag not in VOID:
+            self.stack.append((tag, self.getpos()[0]))
 
-    # 4) 打印样式
-    if "@page" not in s:
-        problems.append("缺 @page 打印样式，Ctrl+P 会跑版")
-    if "page-break-inside" not in s:
-        problems.append("缺 page-break-inside，表格会被撕成两页（建议）")
+    def handle_startendtag(self, tag, attrs):
+        tag = tag.lower()
+        if tag in VOID:
+            self.handle_starttag(tag, attrs)
+            return
+        self.handle_starttag(tag, attrs)
+        self.handle_endtag(tag)
 
-    # 5) 统计
-    text = re.sub(r"<script.*?</script>|<style.*?</style>", "", s, flags=re.S | re.I)
-    text = re.sub(r"<[^>]+>", "", text)
-    text = re.sub(r"\s+", "", text)
-    stats = {
-        "正文字数": len(text),
-        "章节 h2": len(re.findall(r"<h2[\s>]", s, re.I)),
-        "表格": len(tables),
-        "承接/说明框": len(re.findall(r'class="(why|key)"', s)),
-    }
-    return problems, stats
+    def handle_endtag(self, tag):
+        tag = tag.lower()
+        if tag in VOID:
+            return
+        if not self.stack:
+            self.errors.append(self.line_message("unexpected closing </%s>" % tag))
+            return
+        if self.stack[-1][0] != tag:
+            open_names = [item[0] for item in self.stack]
+            if tag not in open_names:
+                self.errors.append(self.line_message("closing </%s> without matching open tag" % tag))
+                return
+            while self.stack and self.stack[-1][0] != tag:
+                open_tag, line = self.stack.pop()
+                self.errors.append(self.line_message("<%s> from line %d closed by </%s>" % (open_tag, line, tag)))
+        if self.stack and self.stack[-1][0] == tag:
+            self.stack.pop()
+        if tag == "style":
+            self.style_depth = max(0, self.style_depth - 1)
+        if tag == "script":
+            self.script_depth = max(0, self.script_depth - 1)
+        if tag == "table" and self.tables:
+            self.completed_tables.append(self.tables.pop())
 
+    def handle_data(self, data):
+        if self.style_depth:
+            self.style_parts.append(data)
+            return
+        if self.script_depth:
+            return
+        self.text_parts.append(data)
+        if "&" in data:
+            self.errors.append(self.line_message("unescaped & in text"))
+        if not self.allow_placeholders:
+            token = PLACEHOLDER.search(data)
+            if token:
+                self.errors.append(self.line_message("unresolved placeholder %s" % token.group(0)))
+            if BRACKET_PLACEHOLDER.search(data):
+                self.warnings.append(self.line_message("possible 【...】 placeholder remains"))
 
-def main(argv):
-    if len(argv) < 2:
-        print(__doc__)
-        return 1
-    bad = 0
-    for path in argv[1:]:
+    def handle_entityref(self, name):
+        if name + ";" not in entities.html5 and name not in entities.html5:
+            self.errors.append(self.line_message("unknown HTML entity &%s;" % name))
+        if not self.style_depth and not self.script_depth:
+            self.text_parts.append(" ")
+
+    def handle_charref(self, name):
         try:
-            problems, stats = check(path)
-        except FileNotFoundError:
-            print("[缺失] %s" % path)
-            bad += 1
+            value = int(name[1:], 16) if name.lower().startswith("x") else int(name)
+            if value < 0 or value > 0x10FFFF:
+                raise ValueError
+        except ValueError:
+            self.errors.append(self.line_message("invalid character reference &#%s;" % name))
+        if not self.style_depth and not self.script_depth:
+            self.text_parts.append(" ")
+
+    def finish(self):
+        self.close()
+        for tag, line in self.stack:
+            self.errors.append("line %d: unclosed <%s>" % (line, tag))
+        all_tables = self.completed_tables + self.tables
+        for table in all_tables:
+            if not table["thead"]:
+                self.errors.append("line %d: table missing <thead>" % table["line"])
+            if not table["tbody"]:
+                self.errors.append("line %d: table missing <tbody>" % table["line"])
+        style = "\n".join(self.style_parts)
+        if "@page" not in style:
+            self.errors.append("missing @page in actual <style> content")
+        if "page-break-inside" not in style and "break-inside" not in style:
+            self.warnings.append("missing break-inside/page-break-inside print protection")
+        if not self.has_doctype:
+            self.warnings.append("missing HTML5 doctype")
+        if not self.has_lang:
+            self.warnings.append("missing html lang attribute")
+        if not self.has_charset:
+            self.warnings.append("missing charset declaration")
+        stats = {
+            "text_chars": len(re.sub(r"\s+", "", "".join(self.text_parts))),
+            "h2": self.h2_count,
+            "tables": len(all_tables),
+            "note_boxes": self.box_count,
+        }
+        return self.errors, self.warnings, stats
+
+
+def check(path, allow_placeholders=False):
+    source = Path(path).read_text(encoding="utf-8")
+    parser = AuditParser(allow_placeholders=allow_placeholders)
+    parser.feed(source)
+    return parser.finish()
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("paths", nargs="+", help="HTML files to validate")
+    parser.add_argument("--allow-placeholders", action="store_true", help="Allow template placeholders")
+    args = parser.parse_args(argv)
+    failed = 0
+    for path in args.paths:
+        try:
+            errors, warnings, stats = check(path, allow_placeholders=args.allow_placeholders)
+        except (OSError, UnicodeError) as exc:
+            print("FAIL %s: %s" % (path, exc))
+            failed += 1
             continue
-        name = path.replace("\\", "/").rsplit("/", 1)[-1]
-        flag = "OK  " if not problems else "FAIL"
-        print("%s %s" % (flag, name))
-        print("     " + " | ".join("%s %s" % (k, v) for k, v in stats.items()))
-        for p in problems:
-            print("     ! " + p)
-        if problems:
-            bad += 1
-    print("\n%d 个文件，%d 个有问题" % (len(argv) - 1, bad))
-    return 0 if bad == 0 else 1
+        print("%s %s" % ("FAIL" if errors else "OK  ", Path(path).name))
+        print("     text {text_chars} | h2 {h2} | tables {tables} | note boxes {note_boxes}".format(**stats))
+        for warning in warnings:
+            print("     ! WARN %s" % warning)
+        for error in errors:
+            print("     ! ERROR %s" % error)
+        if errors:
+            failed += 1
+    print("\n%d files, %d failed" % (len(args.paths), failed))
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    sys.exit(main())
