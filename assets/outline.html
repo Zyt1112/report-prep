@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>讲述提纲模板</title>
+<!--
+用法：复制 → 把七拍换成你这一篇的节拍 → 填压缩关系表 → 保存为「NN_第X篇_讲述提纲.html」。
+节拍定义见 references/structure.md。压缩关系表必须给，否则用户不知道该砍哪里。
+-->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #ECEBE6; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #1A1A1A; }
+  .page { width: 210mm; background: #fff; margin: 16px auto; padding: 18mm 20mm 16mm;
+          box-shadow: 0 2px 14px rgba(0,0,0,.08); }
+  .kicker { font-size: 9pt; letter-spacing: 4px; color: #8A6A3B; }
+  h1 { font-size: 20pt; margin: 7px 0 5px; }
+  .sub { font-size: 9.5pt; color: #6B6B73; line-height: 1.7; }
+  .rule { height: 2px; background: #1F3B57; margin: 12px 0 6px; }
+  h2 { font-size: 12pt; margin: 16px 0 6px; padding-left: 9px; border-left: 4px solid #1F3B57; line-height: 1.45; }
+  p { font-size: 10pt; line-height: 1.85; margin-bottom: 6px; }
+  .beat { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid #E4E8ED; }
+  .beat .n { flex: 0 0 34px; font-size: 15pt; font-weight: 700; color: #C2CFDF; line-height: 1.2; }
+  .beat .b { flex: 1; }
+  .beat .t { font-size: 11pt; font-weight: 700; color: #0F2A44; line-height: 1.5; }
+  .beat .d { font-size: 9.5pt; color: #4A5568; line-height: 1.7; margin-top: 2px; }
+  .beat .h { font-size: 9pt; color: #8A6A3B; line-height: 1.6; margin-top: 3px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 8px; }
+  th, td { border: 1px solid #CFD6DE; padding: 5px 7px; font-size: 8.8pt; line-height: 1.55;
+           vertical-align: top; text-align: left; }
+  th { background: #EEF2F7; font-weight: 700; font-size: 9pt; }
+  .say { background: #FBF3E4; border-left: 3px solid #8A6A3B; padding: 8px 12px; font-size: 10pt;
+         line-height: 1.85; margin: 10px 0; }
+  .small { font-size: 9pt; color: #5C5C63; line-height: 1.8; }
+  .foot { margin-top: 16px; padding-top: 7px; border-top: 1px solid #DCDCD4; font-size: 8.5pt;
+          color: #8B8B85; display: flex; justify-content: space-between; }
+  @media print {
+    body { background: #fff; }
+    .page { margin: 0; box-shadow: none; width: auto; padding: 0; }
+    @page { size: A4; margin: 16mm 18mm 14mm; }
+    .beat { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">第 X 篇 · 讲 述 提 纲</div>
+  <h1>讲述提纲：七拍</h1>
+  <div class="sub">每一拍只做一件事：抛一个问、给一个答、留一个钩<br>讲解稿共 N 节，讲述时压成七拍；被压缩的内容留作答问储备，不丢</div>
+  <div class="rule"></div>
+
+  <div class="beat"><div class="n">1</div><div class="b">
+    <div class="t">场景：【零件 + 工况 + 一句话画面】</div>
+    <div class="d">【工况参数；失效三段式；两个问号，本篇只答第二个】</div>
+    <div class="h">作用：给具体画面，不先谈材料，先谈零件。</div>
+  </div></div>
+
+  <div class="beat"><div class="n">2</div><div class="b">
+    <div class="t">问题：【为什么这件事不好做】</div>
+    <div class="d">【多个变量同时变 → 无法归因 → 必须拆开】</div>
+    <div class="h">作用：把范围收窄，避免一上来铺开讲整个学科。</div>
+  </div></div>
+
+  <div class="beat"><div class="n">3</div><div class="b">
+    <div class="t">设计：【矩阵怎么来的】</div>
+    <div class="d">【几乘几、每格几件、锁死哪几项】</div>
+    <div class="h">作用：方法论核心，后面所有数据都从这儿来。</div>
+  </div></div>
+
+  <div class="beat"><div class="n">4</div><div class="b">
+    <div class="t">动手：【哪几个动作做错就废】</div>
+    <div class="d">【2–3 个，各一句因果，不铺开】</div>
+    <div class="h">作用：把"实验步骤"从流水账变成几个有因果的决策。</div>
+  </div></div>
+
+  <div class="beat"><div class="n">5</div><div class="b">
+    <div class="t">现象：【材料怎么回应】</div>
+    <div class="d">【曲线层数据；有无异常；早期预判有没有被验证】</div>
+    <div class="h">作用：先讲看得见的曲线，为下一页的机制埋钩子。</div>
+  </div></div>
+
+  <div class="beat"><div class="n">6</div><div class="b">
+    <div class="t">机制：【显微镜下发生了什么】</div>
+    <div class="d">【两条独立证据互印；起裂路径】</div>
+    <div class="h">作用：回答"为什么参数会改变行为"。</div>
+  </div></div>
+
+  <div class="beat"><div class="n">7</div><div class="b">
+    <div class="t">结论：【坎在哪，能推多远】</div>
+    <div class="d">【量化结论 + 排他性论证 + 外推能力 + 一句边界】</div>
+    <div class="h">作用：给可用结论，同时点明适用边界。</div>
+  </div></div>
+
+  <h2>讲解稿 N 节 → 七拍：压缩关系</h2>
+  <table>
+    <thead><tr><th style="width:30%">讲解稿的节</th><th style="width:14%">进不进讲述</th><th>处理方式</th></tr></thead>
+    <tbody>
+      <tr><td>一 结论先行</td><td>进，压缩</td><td>—</td></tr>
+      <tr><td>五 实验流程</td><td><b>不进</b></td><td>整节留作答问储备。被问"具体怎么做"时翻这里</td></tr>
+      <tr><td>十一 自测五问</td><td><b>不进</b></td><td>讲者自己的准备清单</td></tr>
+    </tbody>
+  </table>
+
+  <h2>一句话总纲（收口用）</h2>
+  <div class="say"><b>【这一篇到底做了什么，一句话。要含"拆开了什么"和"因此才敢说什么"。】</b></div>
+
+  <h2>讲述时的三个注意</h2>
+  <p class="small">① 第 3 拍要慢，矩阵图可以现场画。<br>
+  ② 第 4 拍不要念流水账，只说几个"做错就白做"的动作。<br>
+  ③ 最后一拍讲完立刻补边界，免得听众以为可以到处套。</p>
+
+  <div class="foot"><span>【项目名】 · 第 X 篇讲述提纲</span><span>04 / 05</span></div>
+</div>
+</body>
+</html>

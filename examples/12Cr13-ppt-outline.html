@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>第二篇 · PPT 结构提纲</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #ECEBE6; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #1A1A1A; }
+  .page { width: 210mm; min-height: 297mm; background: #fff; margin: 16px auto; padding: 17mm 18mm 15mm;
+          box-shadow: 0 2px 14px rgba(0,0,0,.08); }
+  .kicker { font-size: 9pt; letter-spacing: 4px; color: #8A6A3B; }
+  h1 { font-size: 20pt; margin: 7px 0 5px; }
+  .sub { font-size: 9.5pt; color: #6B6B73; line-height: 1.7; }
+  .rule { height: 2px; background: #1F3B57; margin: 12px 0 6px; }
+  h2 { font-size: 12pt; margin: 16px 0 6px; padding-left: 9px; border-left: 4px solid #1F3B57; line-height: 1.45; }
+  p { font-size: 9.8pt; line-height: 1.8; margin-bottom: 5px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 8px; }
+  th, td { border: 1px solid #CFD6DE; padding: 5px 7px; font-size: 8.8pt; line-height: 1.55; vertical-align: top; text-align: left; }
+  th { background: #EEF2F7; font-weight: 700; font-size: 9pt; }
+  td.n { width: 7mm; text-align: center; font-weight: 700; color: #1F3B57; background: #F7F9FC; }
+  td.t { width: 42mm; font-weight: 700; color: #0F2A44; }
+  td.h { width: 40mm; color: #8A6A3B; background: #FDFAF3; }
+  .chain { background: #F6F8FB; border-left: 3px solid #1F3B57; padding: 8px 11px; font-size: 9.4pt;
+           line-height: 1.9; margin: 8px 0; }
+  .say { background: #FBF3E4; border-left: 3px solid #8A6A3B; padding: 7px 11px; font-size: 9.6pt; line-height: 1.8; margin: 7px 0; }
+  .small { font-size: 8.8pt; color: #5C5C63; line-height: 1.75; }
+  ul { margin: 4px 0 7px 17px; }
+  li { font-size: 9.4pt; line-height: 1.8; margin-bottom: 3px; }
+  .foot { margin-top: 14px; padding-top: 6px; border-top: 1px solid #DCDCD4; font-size: 8.5pt; color: #8B8B85;
+          display: flex; justify-content: space-between; }
+  @media print {
+    body { background: #fff; }
+    .page { margin: 0; box-shadow: none; width: auto; min-height: auto; padding: 0; }
+    @page { size: A4; margin: 15mm 16mm 13mm; }
+    tr, .chain, .say { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">第 二 篇 · P P T 结 构 提 纲</div>
+  <h1>七页，一问接一问</h1>
+  <div class="sub">针对“上下页没有关联”改的结构｜12Cr13 低周疲劳</div>
+  <div class="rule"></div>
+
+  <h2>为什么这么排：三条规矩</h2>
+  <ul>
+    <li><b>一页只回答一个问题，标题就写那个问题。</b>不写“研究背景”“实验方法”这种名词短语——名词短语之间天然没有先后，谁在前谁在后都行，这就是散的原因。</li>
+    <li><b>每页底部压一句“承接句”。</b>这一页答完了，立刻把下一页要回答的问题抛出来。观众的手还没放下，钩子已经挂上了。</li>
+    <li><b>七页连起来要像一段对话。</b>自检方法：只读七个标题，如果能顺着念下来不打结，结构就成立；如果念到中间要停一下想“为什么到这儿了”，就说明断了一环。</li>
+  </ul>
+
+  <h2>七页结构</h2>
+  <table>
+    <thead><tr>
+      <th>页</th><th>标题（就是这一页要问的问题）</th><th>这一页给什么</th><th>页底承接句（引出下一页）</th>
+    </tr></thead>
+    <tbody><tr>
+      <td class="n">1</td>
+      <td class="t">一片叶片在热蒸汽里被反复推，它能撑多少次？</td>
+      <td>叶片工况（3000 r/min、450 ℃、局部进入塑性）；疲劳是三段式（萌生—扩展—瞬断）；两个问号：撑多久、从哪度开始变坏。<br><b>只给画面，不给数据。</b></td>
+      <td class="h">要知道“多少度开始变坏”，得先有不同温度下的寿命——可这条钢的数据几乎都停在室温。</td>
+    </tr>
+    <tr>
+      <td class="n">2</td>
+      <td class="t">想弄清温度的影响，为什么非得做 4×4 的矩阵？</td>
+      <td>两个变量一起变就归因不了；矩阵 = 横 4 温度 × 竖 4 幅值，一格至少 2 件；同期把材料、热处理、表面全部锁死。<br><b>这一页只讲“设计”，不讲结果。</b></td>
+      <td class="h">设计定了，可只要有一根试样的表面有划痕、温度差五度，这一格就废了——怎么保证每根都可信？</td>
+    </tr>
+    <tr>
+      <td class="n">3</td>
+      <td class="t">哪些动作做错，这一格数据就废了？</td>
+      <td>三个“做错就白做”：电解抛光（防划痕起裂）、控变形不控力（防棘轮失稳）、压缩段变形即停（防瞬断不可比）。<br>再补两个保障：对中 0.05 mm、热电偶点焊加保温 30 min。</td>
+      <td class="h">数据干净了，第一眼看什么？——先看材料怎么“回应”这些折腾。</td>
+    </tr>
+    <tr>
+      <td class="n">4</td>
+      <td class="t">被反复折腾时，材料是怎么回应的？</td>
+      <td>两阶段硬化：前 10 循环最快（占总寿命约 0.5%），之后缓慢上升、始终不饱和；Masing：归一化后滞回环重合，可用一套参数；σUTS/σy 从 1.82 降到 1.49，提前预判了硬化。</td>
+      <td class="h">曲线只告诉我们“变硬了”，可它为什么会变硬、为什么温度会改变这个行为？</td>
+    </tr>
+    <tr>
+      <td class="n">5</td>
+      <td class="t">显微镜下，它到底发生了什么？</td>
+      <td>位错组态：室温为胞状，高温转为墙与通道，通道间距随温度增大；KAM 随温度下降，与 TEM 一致；起裂两条路：沿滑移带（约 45°）或沿晶界，450 ℃ 起裂点增多。</td>
+      <td class="h">机制解释到这里，可工程只关心一件事——这些机制让寿命变了多少？</td>
+    </tr>
+    <tr>
+      <td class="n">6</td>
+      <td class="t">寿命的拐点在哪，为什么在那儿？</td>
+      <td>25–350 ℃ 寿命几乎重合；450 ℃ 明显下降；机制是氧化皮反复破裂、裸金属暴露、扩展加速（辉纹变宽、起裂点增多）；过渡寿命 Nt 随温度升高而增大。</td>
+      <td class="h">既然 450 ℃ 才出问题，那能不能不重做三套试验，直接用室温数据推算？</td>
+    </tr>
+    <tr>
+      <td class="n">7</td>
+      <td class="t">室温的数据能推到多远，推到哪儿就不灵了？</td>
+      <td>用室温 Coffin-Manson 参数预测全部温度，落在 2 倍带内、R² 高于 99%；原因是该温区没有动态应变时效；边界：单一材料、无保载、标准试样；对我的用：可直接抄成 SOP，先算 σUTS/σy 预判软硬。</td>
+      <td class="h">（收口，不再抛新问题）</td>
+    </tr></tbody>
+  </table>
+
+  <h2>只读七个标题，应该像这样一段话</h2>
+  <div class="chain">
+    一片叶片能撑多少次？→ 想知道温度的影响，为什么非得做矩阵？→ 那哪些动作做错就废？→ 数据回来，材料怎么回应？→ 曲线背后微观发生了什么？→ 那寿命的拐点在哪？→ 室温数据能推多远？<br>
+    <span class="small">念一遍不打结，说明七页是一条链；中间任何一处要停下来想“为什么到这儿”，就是断了。</span>
+  </div>
+
+  <h2>与旧版结构的关键差别</h2>
+  <table>
+    <thead><tr><th style="width:26%">维度</th><th style="width:37%">旧版（五页）</th><th style="width:37%">这一版（七页）</th></tr></thead>
+    <tbody><tr><td>页标题</td><td>“研究背景”“实验步骤”“数据链”“结论”——名词短语</td><td>七个问句，每句就是那一页要回答的事</td></tr>
+    <tr><td>页间关系</td><td>并列：翻过去是“下一类内容”</td><td>递进：翻过去是“上一页留下的问题”</td></tr>
+    <tr><td>信息组织</td><td>按“论文的章节”切</td><td>按“听众的疑问”切</td></tr>
+    <tr><td>结论位置</td><td>集中在最后一页</td><td>每页一个“阶段性结论”，最后一页收口</td></tr></tbody>
+  </table>
+
+  <h2>两个可选项</h2>
+  <p class="small"><b>时间紧（15 分钟）：</b>把第 4、5 页合并成“数据的两层证据——曲线与显微镜”，变六页，其余不动。<br>
+  <b>导师偏工程：</b>把第 5 页（微观）压成第 6 页底部的三条注脚，腾出篇幅把第 3 页的实验细节讲透。</p>
+
+  <div class="say"><b>一句话：让每一页都“没说完”，是让整份 PPT 说成一句话的办法。</b></div>
+
+  <div class="foot"><span>汇报前置工作 · 第二篇 PPT 结构提纲</span><span>05 / 05</span></div>
+</div>
+</body>
+</html>
