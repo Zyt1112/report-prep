@@ -1,5 +1,7 @@
 # report-prep · 汇报前准备
 
+> 仓库地址：https://github.com/Zyt1112/report-prep
+
 把论文转成能讲出去的材料。不生成"摘要"，生成**一条能顺着讲下来的链**。
 
 适用于：组会汇报、导师一对一、文献精读汇报、开题/答辩预演。
@@ -55,7 +57,7 @@ Windows 上 `~` 是 `C:\Users\<你的用户名>`。
 **方式三：clone 后拷**
 
 ```bash
-git clone https://github.com/<你的账号>/report-prep.git
+git clone https://github.com/Zyt1112/report-prep.git
 cp -r report-prep ~/.workbuddy/skills/
 ```
 
