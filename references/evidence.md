@@ -50,10 +50,11 @@
 
 ```bash
 python scripts/check_numbers.py evidence.json content.json
+python scripts/check_numbers.py evidence.json content.json --source pdfs/p2.md   # 核对 quote 是否真在原文
 python scripts/render_html.py content.json --evidence evidence.json -o deliverable.html
 ```
 
-渲染器会替换证据令牌并转义 HTML。使用未登记 ID、引用非 `verified`/`derived` 项，或 `display` 与 `value` 不一致时，检查失败。
+渲染器会替换证据令牌并转义 HTML。使用未登记 ID、引用非 `verified`/`derived` 项，或 `display` 与 `value` 不一致时，检查失败。裸数字与 quote 缺失默认是 WARN，加 `--strict` 升级为 ERROR。
 
 ## 三、派生值与换算
 
@@ -66,12 +67,29 @@ python scripts/render_html.py content.json --evidence evidence.json -o deliverab
 
 ## 四、非数值论断
 
-机制、因果和适用边界同样需要来源，但可以不用数字令牌。至少在结构提纲或逐页详解中记录：
+机制、因果和适用边界同样需要来源，但没有数字。这类项**照样进台账**，用 `qualitative: true`：
 
-- 论断 ID；
-- 来源文件与精确位置；
-- 原文摘录或图注；
-- 类型：作者解释 / 本次推断 / 工程建议。
+```json
+{
+  "id": "E011",
+  "display": "Masing 行为成立",
+  "value": null,
+  "unit": "—",
+  "source": "p2.md",
+  "locator": "4. Conclusions (1)",
+  "quote": "the material exhibited Masing behaviour at all tested temperatures",
+  "status": "verified",
+  "kind": "author_result",
+  "qualitative": true
+}
+```
+
+规则：
+
+- `qualitative: true` 时 `value` 必须为 `null`，跳过数值等价校验；
+- `display` 写论断本身，渲染时直接替换令牌，不要塞数字；
+- 其余字段（`source`/`locator`/`quote`/`status`/`kind`）照旧必填；
+- 不能同时标 `reported_missing`。
 
 多条证据共同支撑一个推断时，列出全部 ID，并写清推理步骤。证据不足时使用“可能”“与……一致”，不要写成已证明的因果关系。
 
@@ -82,6 +100,20 @@ python scripts/render_html.py content.json --evidence evidence.json -o deliverab
 - 没有原始数值时，可以描述趋势或绘制明确标注的机制示意图，但不能生成貌似真实的定量曲线。
 - 裁切原图时保留坐标轴、单位、图例和必要图注。
 
-## 六、检查边界
+## 六、检查边界与三类告警
 
-`check_numbers.py` 只检查内容 JSON 中显式写出的证据令牌。章节编号、用户指定时长等结构性数字可以普通书写；所有来源科研数据应使用令牌。交付前仍需人工检查是否存在绕过令牌手写的来源数字。
+`check_numbers.py` 做三件事：
+
+1. **令牌一致性**（ERROR）：ID 存在、状态可用、`display` 与 `value` 等价。
+2. **裸数字扫描**（WARN，`--strict` 升 ERROR）：带单位的数字一律提示；纯数字字段只在恰好等于某条证据值时提示“应改用令牌”。
+3. **原文核对**（`--source`，WARN，`--strict` 升 ERROR）：核对 `quote` 是否真在给定文本里；`status: derived` 跳过。
+
+`--source` 报“quote 未命中”时只有三种可能，按顺序排查：
+
+| 原因 | 表现 | 修法 |
+|---|---|---|
+| 摘录不严谨 | 少括号、改标点、把两句并成一句 | 按原文原样重抄 `quote` |
+| PDF 提取噪声 | 行尾 `###`、断字、`°C` 被抽成 `◦C` | 脚本已归一化；仍不过就换更短的片段 |
+| 公式/图表转写 | quote 写成 `p = 1.2 × 10⁻³ • Nf^−0.4079` | 改 `status: derived` + `note` 写公式与输入，或把 quote 换成原文叙述句 |
+
+结构性数字（章节号、页码、用户指定时长）可以普通书写，扫描不会报；来源科研数据必须走令牌。无论脚本怎么过，最终仍需人工回原文确认语义没有被断章取义。

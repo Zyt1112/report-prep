@@ -80,7 +80,8 @@ class NumberTests(unittest.TestCase):
     def test_examples_pass(self):
         errors, warnings, stats, _ = check_numbers.audit(self.evidence, self.content)
         self.assertEqual([], errors)
-        self.assertEqual([], warnings)
+        # 示例里 25 ℃ / 250 ℃ 是试验条件、未入台账，会被裸数字扫描提示；其余警告应为 0
+        self.assertEqual([], [item for item in warnings if "裸数字" not in item])
         self.assertEqual(2, stats["references"])
         self.assertEqual(2, stats["used"])
 
@@ -120,6 +121,85 @@ class NumberTests(unittest.TestCase):
             check_numbers.parse_decimal("−1,234.5"),
             check_numbers.parse_decimal(-1234.5),
         )
+
+    def test_bare_number_with_unit_is_reported(self):
+        content = copy.deepcopy(self.content)
+        content["beats"][0]["detail"] = "峰值 650 MPa 出现在 50 µm 深处。"
+        errors, warnings, stats, _ = check_numbers.audit(self.evidence, content)
+        self.assertEqual([], errors)
+        self.assertTrue(any("650MPa" in item for item in warnings))
+        self.assertTrue(any("50µm" in item for item in warnings))
+        self.assertGreaterEqual(stats["bare"], 2)
+
+    def test_bare_number_reuses_existing_evidence_id(self):
+        content = copy.deepcopy(self.content)
+        content["beats"][0]["detail"] = "过渡寿命 24845 cycles。"
+        _, warnings, _, _ = check_numbers.audit(self.evidence, content)
+        self.assertTrue(any("应改用 {{E001}}" in item for item in warnings))
+
+    def test_bare_number_strict_upgrades_to_error(self):
+        content = copy.deepcopy(self.content)
+        content["beats"][0]["detail"] = "峰值 650 MPa。"
+        errors, _, _, _ = check_numbers.audit(self.evidence, content, strict=True)
+        self.assertTrue(any("650MPa" in error for error in errors))
+
+    def test_qualitative_item_passes_without_value(self):
+        evidence = copy.deepcopy(self.evidence)
+        evidence["items"].append(
+            {
+                "id": "E009",
+                "display": "Masing 行为成立",
+                "value": None,
+                "unit": "—",
+                "source": "demo-source.txt",
+                "locator": "line 5",
+                "quote": "Masing behaviour was observed.",
+                "status": "verified",
+                "kind": "author_result",
+                "qualitative": True,
+            }
+        )
+        errors, _, stats, _ = check_numbers.audit(evidence, self.content)
+        self.assertEqual([], [error for error in errors if "E009" in error])
+        self.assertEqual(1, stats["qualitative"])
+
+    def test_qualitative_item_must_not_carry_value(self):
+        evidence = copy.deepcopy(self.evidence)
+        evidence["items"].append(
+            {
+                "id": "E010",
+                "display": "Masing 行为成立",
+                "value": 1,
+                "unit": "—",
+                "source": "demo-source.txt",
+                "locator": "line 5",
+                "quote": "Masing behaviour was observed.",
+                "status": "verified",
+                "kind": "author_result",
+                "qualitative": True,
+            }
+        )
+        errors, _, _, _ = check_numbers.audit(evidence, self.content)
+        self.assertTrue(any("E010 qualitative must use value null" in error for error in errors))
+
+    def test_source_quote_found(self):
+        source = "\n".join(item["quote"] for item in self.evidence["items"])
+        errors, warnings, stats, _ = check_numbers.audit(self.evidence, self.content, source_text=source)
+        self.assertFalse(any("quote 未在" in item for item in warnings))
+        self.assertEqual(2, stats["quotes"])
+
+    def test_source_quote_missing_is_reported(self):
+        errors, warnings, stats, _ = check_numbers.audit(
+            self.evidence, self.content, source_text="A different sentence entirely."
+        )
+        self.assertTrue(any("quote 未在" in item for item in warnings))
+        self.assertEqual(2, stats["quotes"])
+
+    def test_source_quote_missing_strict_is_error(self):
+        errors, _, _, _ = check_numbers.audit(
+            self.evidence, self.content, source_text="A different sentence entirely.", strict=True
+        )
+        self.assertTrue(any("quote 未在" in error for error in errors))
 
 
 class HtmlTests(unittest.TestCase):

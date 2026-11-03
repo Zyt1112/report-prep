@@ -76,6 +76,7 @@
 ```
 report-prep/
 ├── SKILL.md                    主入口：任务入口、流程门禁、资源路由、自检
+├── CHANGELOG.md                变更记录
 ├── references/
 │   ├── pipeline.md             执行流程与工具适配
 │   ├── structure.md            讲述结构、时长与听众、多篇模式
@@ -149,11 +150,14 @@ python scripts/check_html.py assets/*.html --allow-placeholders
 
 ## 版本
 
+- **1.5**（2026-11-03）数字检查补漏：定性证据 `qualitative`、裸数字扫描、`--source` 原文核对、`--strict`；清掉页脚承接句残留；版本记录移入 CHANGELOG。
 - **1.4**（2026-11-03）定稿版式：页数不设上限、图按内容加、边界页可选、承接句入提纲、表格强调改短下划线；新增 `doctor.py` / `setup_env.ps1` / `environment.md`；收录 6 页样张。
 - **1.3** `deck-style.md`：章节式版式、版面栅格、P1–P6 页型、术语注解。
 - **1.2** 四类任务入口、证据台账与 `{{E001}}`、JSON→HTML 渲染、逐页详解、结构化 HTML 校验、21 项单测。
 - **1.1** 实验/建模/仿真三类骨架。
 - **1.0** 首版。
+
+完整变更历史见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 许可
 

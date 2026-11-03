@@ -83,7 +83,7 @@ agent_created: true
 
 - 标题提出本页要回答的问题；标题下第一句直接给出当前最佳答案。
 - 第一张内容页必须出现全篇核心判断及成立前提，不能只放悬念或场景。
-- 中间页用承接句把本页结论变成下一页的问题；最后一页收口，不再抛新问题。
+- 中间页用承接句把本页结论变成下一页的问题（承接句写进提纲，不上页面）；最后一页收口，不再抛新问题。
 - **页数和拍数由内容决定，不设上限**：一页只回答一个问题，问题多就加页；不要为卡页数把两问压进一页，也不要删证据或把图缩成缩略图。参考区间见 `references/structure.md`。
 
 ### 3. 来源数据统一走证据台账
@@ -138,6 +138,7 @@ agent_created: true
 
 ```bash
 python scripts/check_numbers.py evidence.json content.json
+python scripts/check_numbers.py evidence.json content.json --source pdfs/p1.md   # 核对 quote 真伪
 python scripts/render_html.py content.json --evidence evidence.json -o deliverable.html
 python scripts/check_html.py deliverable.html
 ```
@@ -183,10 +184,6 @@ python scripts/doctor.py --fix-hint  # 同时打印修复建议
 
 Windows 上 `slidep` 报 `Failed to load native binding` 时，运行 `scripts/setup_env.ps1`（收紧 SWC 缓存权限、建最小权限缓存目录、必要时建虚拟盘）。完整依赖清单与安装步骤见 `references/environment.md`。
 
-## 版本记录
+## 版本
 
-- **1.4（2026-11-03）** 定稿章节式版式：页数不设上限、图按内容加不按页凑、边界与迁移页可选、承接句移入提纲、表格强调改红字短下划线；新增环境自检 `scripts/doctor.py`、一键配置 `scripts/setup_env.ps1`、`references/environment.md`；收录 6 页标准样张 `examples/deck-v3-4340m/`；README 与 HANDOVER 重写为可交接文档。
-- **1.3（2026-11-03）** 新增 `references/deck-style.md`：章节式版式规范、版面栅格、P1–P5 页型与“提纲到页面”映射；明确标题三方案（章节式/问句式/双层默认）与“每页必有核心结论句”；新增术语首现注解规则；提纲阶段需标注页型。
-- **1.2（2026-11-02）** 增加四类任务入口、阶段资源路由、证据台账与数字引用、JSON 驱动 HTML 渲染、逐页详解、模拟追问和器件/方法设计类骨架；统一结论先行、页数与多篇模式规则；增强校验脚本并补自动化测试。
-- **1.1（2026-11-02）** 按实验/建模/仿真三类论文拆分 PPT 骨架，新增页面制作规范。
-- **1.0（2026-11-02）** 首版：结构诊断、讲解稿、讲述提纲与 PPT 流程。
+当前 **1.5**（2026-11-03）。变更历史见 [`CHANGELOG.md`](CHANGELOG.md)。
