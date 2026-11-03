@@ -1,0 +1,46 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', flexDirection: 'column' }}>
+    <Box style={{ height: 56, background: '#0024B3', padding: '0 40px', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Image src="assets/tyust-logo.png" style={{ width: 118, height: 24 }} />
+        <Text style={{ fontSize: 12, color: '#BFD0F5' }}>5 / 6</Text>
+    </Box>
+    <Box style={{ flex: 1, padding: '22px 40px 0', flexDirection: 'column', gap: 10 }}>
+        <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#0024B3' }}>起裂源</Text>
+        <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.5 }}>裂纹从内部夹杂起，不是从喷丸层起——所以喷丸管不到它。</Text>
+        <Box style={{ flexDirection: 'row', gap: 40, marginTop: 12, flex: 1 }}>
+            <Box style={{ width: 300, alignItems: 'center', justifyContent: 'center' }}>
+                <Box style={{ width: 230, height: 230, borderRadius: 999, background: '#F1EFE8', justifyContent: 'center', alignItems: 'center' }}>
+                    <Box style={{ width: 156, height: 156, borderRadius: 999, background: '#FFFFFF', border: '1px solid #B4B2A9', justifyContent: 'center', alignItems: 'center' }}>
+                        <Box style={{ width: 84, height: 84, borderRadius: 999, background: '#D3D1C7', justifyContent: 'center', alignItems: 'center' }}>
+                            <Box style={{ width: 20, height: 20, borderRadius: 999, background: '#5F5E5A' }} />
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 12, justifyContent: 'center' }}>
+                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                    <Box style={{ width: 12, height: 12, background: '#5F5E5A' }} />
+                    <Text style={{ fontSize: 17, color: '#1A2230' }}>夹杂物：裂纹起点，EDS 见 Ni / S / Ca</Text>
+                </Box>
+                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                    <Box style={{ width: 12, height: 12, background: '#D3D1C7' }} />
+                    <Text style={{ fontSize: 17, color: '#1A2230' }}>细颗粒区 FGA：纳米细晶，扩展极慢</Text>
+                </Box>
+                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                    <Box style={{ width: 12, height: 12, background: '#FFFFFF', border: '1px solid #B4B2A9' }} />
+                    <Text style={{ fontSize: 17, color: '#1A2230' }}>鱼眼：内部稳定扩展，比 FGA 大一个量级</Text>
+                </Box>
+                <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+                    <Box style={{ width: 12, height: 12, background: '#F1EFE8' }} />
+                    <Text style={{ fontSize: 17, color: '#1A2230' }}>瞬断区：最后失稳，断面粗糙</Text>
+                </Box>
+                <Box style={{ marginTop: 8, padding: '10px 14px', borderLeft: '3px solid #D9534F', background: '#FFF8F1' }}>
+                    <Text style={{ fontSize: 15, color: '#1A2230', lineHeight: 1.6 }}>寿命超过 10⁶ 次后，起裂位置整体从表面转向内部。</Text>
+                </Box>
+            </Box>
+        </Box>
+    </Box>
+    <Box style={{ height: 62, padding: '0 40px', borderTop: '1px solid #D6DCE5', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>FGA：Fine Granular Area；鱼眼为断口上的圆形亮区，二者不同层级</Text>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>图 4　内部起裂断口结构（示意，非真实比例）</Text>
+    </Box>
+</Slide>

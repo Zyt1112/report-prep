@@ -1,0 +1,49 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', flexDirection: 'column' }}>
+    <Box style={{ height: 56, background: '#0024B3', padding: '0 40px', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Image src="assets/tyust-logo.png" style={{ width: 118, height: 24 }} />
+        <Text style={{ fontSize: 12, color: '#BFD0F5' }}>3 / 6</Text>
+    </Box>
+    <Box style={{ flex: 1, padding: '22px 40px 0', flexDirection: 'column', gap: 12 }}>
+        <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#0024B3' }}>喷丸作用</Text>
+        <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.5 }}>喷丸把表面硬度抬到峰值 650，硬化层约 400 µm——这就是它的有效影响区。</Text>
+        <Box style={{ flexDirection: 'row', padding: '10px 14px', background: '#F7F9FC', borderBottom: '1px solid #D6DCE5' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>测点</Text></Box>
+            <Box style={{ width: 170 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>HV</Text></Box>
+            <Box style={{ width: 180 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>距表面</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>读法</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '13px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>基体 STD</Text></Box>
+            <Box style={{ width: 170 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>590</Text></Box>
+            <Box style={{ width: 180 }}><Text style={{ fontSize: 17, color: '#8B97A8' }}>—</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 16, color: '#4A5568' }}>未喷丸的原始水平</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '12px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 17, fontWeight: 'bold', color: '#1A2230' }}>峰值 SP</Text></Box>
+            <Box style={{ width: 170 }}>
+                <Box style={{ alignSelf: 'flex-start', borderBottom: '2px solid #D9534F', paddingBottom: 2 }}>
+                    <Text style={{ fontSize: 26, fontWeight: 'bold', color: '#D9534F' }}>650</Text>
+                </Box>
+            </Box>
+            <Box style={{ width: 180 }}>
+                <Box style={{ alignSelf: 'flex-start', borderBottom: '2px solid #D9534F', paddingBottom: 2 }}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#D9534F' }}>50 µm</Text>
+                </Box>
+            </Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 16, color: '#1A2230' }}>喷丸硬化最强处，比基体高 10%</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '13px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>层底</Text></Box>
+            <Box style={{ width: 170 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>600</Text></Box>
+            <Box style={{ width: 180 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>400 µm</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 16, color: '#4A5568' }}>回落到近基体水平 → 硬化层边界</Text></Box>
+        </Box>
+        <Box style={{ marginTop: 14, padding: '10px 14px', background: '#FFF8E1' }}>
+            <Text style={{ fontSize: 15, color: '#1A2230', lineHeight: 1.6 }}>硬度梯度是残余压应力场的影子；三种烘烤态的硬度趋势与 SP 组基本一致，说明 246 °C 没有把硬化层烤塌。</Text>
+        </Box>
+    </Box>
+    <Box style={{ height: 62, padding: '0 40px', borderTop: '1px solid #D6DCE5', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>HV（维氏硬度）：136° 金刚石压头，载荷 200 g、保载 15 s，压痕约 25 µm</Text>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>表 2　硬度关键读数（数据：原文 Fig. 5 / 结论 2）</Text>
+    </Box>
+</Slide>

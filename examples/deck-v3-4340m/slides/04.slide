@@ -1,0 +1,57 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', flexDirection: 'column' }}>
+    <Box style={{ height: 56, background: '#0024B3', padding: '0 40px', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Image src="assets/tyust-logo.png" style={{ width: 118, height: 24 }} />
+        <Text style={{ fontSize: 12, color: '#BFD0F5' }}>4 / 6</Text>
+    </Box>
+    <Box style={{ flex: 1, padding: '22px 40px 0', flexDirection: 'column', gap: 10 }}>
+        <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#0024B3' }}>实验结果</Text>
+        <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.5 }}>抗拉小亏、屈服大赚：抗拉降 80–111 MPa，屈服升 206–262 MPa。</Text>
+        <Box style={{ flexDirection: 'row', padding: '9px 14px', background: '#F7F9FC', borderBottom: '1px solid #D6DCE5' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>状态</Text></Box>
+            <Box style={{ width: 240 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>抗拉 / MPa</Text></Box>
+            <Box style={{ width: 250 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>屈服 / MPa</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>延伸率 / %</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '9px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>STD</Text></Box>
+            <Box style={{ width: 240 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>2098 ± 70</Text></Box>
+            <Box style={{ width: 250 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>1360 ± 9</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>14.3</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '9px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>SP</Text></Box>
+            <Box style={{ width: 240 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>2129 ± 85</Text></Box>
+            <Box style={{ width: 250 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>1416 ± 76</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>12.4</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '9px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>SP-B200</Text></Box>
+            <Box style={{ width: 240 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>2036 ± 7</Text></Box>
+            <Box style={{ width: 250 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>1504 ± 12</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>13.5</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '10px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 17, fontWeight: 'bold', color: '#1A2230' }}>SP-B246</Text></Box>
+            <Box style={{ width: 240 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>2011 ± 16</Text></Box>
+            <Box style={{ width: 250 }}>
+                <Box style={{ alignSelf: 'flex-start', borderBottom: '2px solid #D9534F', paddingBottom: 2 }}>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#D9534F' }}>1619 ± 12</Text>
+                </Box>
+            </Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 16, color: '#4A5568' }}>比基体高 259 MPa</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '9px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 200 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>SP-B260</Text></Box>
+            <Box style={{ width: 240 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>2008 ± 15</Text></Box>
+            <Box style={{ width: 250 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>1622 ± 4</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 17, color: '#1A2230' }}>14.0</Text></Box>
+        </Box>
+        <Box style={{ marginTop: 14, padding: '10px 14px', background: '#FFF8E1' }}>
+            <Text style={{ fontSize: 15, color: '#1A2230', lineHeight: 1.6 }}>屈服逼近抗拉，材料在弹性区「更能扛」——这决定 HCF / VHCF 的疲劳极限；抗拉略降不影响弹性承载。</Text>
+        </Box>
+    </Box>
+    <Box style={{ height: 62, padding: '0 40px', borderTop: '1px solid #D6DCE5', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>括号内为标准差；原文 Table 3</Text>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>表 3　五状态拉伸性能（数据：原文 Table 3）</Text>
+    </Box>
+</Slide>

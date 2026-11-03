@@ -1,0 +1,56 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', flexDirection: 'column' }}>
+    <Box style={{ height: 56, background: '#0024B3', padding: '0 40px', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Image src="assets/tyust-logo.png" style={{ width: 118, height: 24 }} />
+        <Text style={{ fontSize: 12, color: '#BFD0F5' }}>6 / 6</Text>
+    </Box>
+    <Box style={{ flex: 1, padding: '22px 40px 0', flexDirection: 'column', gap: 10 }}>
+        <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#0024B3' }}>实验结论（疲劳）</Text>
+        <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.5 }}>HCF 区间五组几乎没差别；寿命进入超高周后，烘烤组的疲劳极限反超 STD 与 SP。</Text>
+        <Box style={{ flexDirection: 'row', gap: 24, marginTop: 8 }}>
+            <Box style={{ width: 520, flexDirection: 'column', gap: 10 }}>
+                <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#0024B3' }}>试验条件</Text>
+                <Text style={{ fontSize: 15, color: '#1A2230', lineHeight: 1.7 }}>20 kHz 超声疲劳，应力控制，R = −1，表面抛光至 Ra 0.02 µm 以排除粗糙度干扰，跑到断裂为止。</Text>
+                <Text style={{ fontSize: 15, color: '#1A2230', lineHeight: 1.7 }}>高频才可能在两三天内拿到 10⁷ 次级别数据——这是 VHCF 研究的前置条件。</Text>
+                <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#0024B3', marginTop: 6 }}>为什么会反超</Text>
+                <Text style={{ fontSize: 15, color: '#1A2230', lineHeight: 1.7 }}>超高周应力幅落在弹性区，疲劳极限由屈服强度决定。烘烤把屈服从 1360–1416 提到 1504–1622 MPa，天花板随之抬高。</Text>
+            </Box>
+            <Box style={{ flex: 1, flexDirection: 'column', gap: 8 }}>
+                <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#0024B3' }}>典型断口案例</Text>
+                <Box style={{ flexDirection: 'row', padding: '6px 10px', background: '#F7F9FC', borderBottom: '1px solid #D6DCE5' }}>
+                    <Box style={{ width: 120 }}><Text style={{ fontSize: 13, fontWeight: 'bold', color: '#4A5568' }}>状态</Text></Box>
+                    <Box style={{ flex: 1 }}><Text style={{ fontSize: 13, fontWeight: 'bold', color: '#4A5568' }}>应力幅 / MPa</Text></Box>
+                    <Box style={{ flex: 1 }}><Text style={{ fontSize: 13, fontWeight: 'bold', color: '#4A5568' }}>寿命 / cycles</Text></Box>
+                </Box>
+                <Box style={{ flexDirection: 'row', padding: '7px 10px', borderBottom: '1px solid #E5E7EB' }}>
+                    <Box style={{ width: 120 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>STD</Text></Box>
+                    <Box style={{ flex: 1 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>975</Text></Box>
+                    <Box style={{ flex: 1 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>1.96×10⁶</Text></Box>
+                </Box>
+                <Box style={{ flexDirection: 'row', padding: '7px 10px', borderBottom: '1px solid #E5E7EB' }}>
+                    <Box style={{ width: 120 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>SP</Text></Box>
+                    <Box style={{ flex: 1 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>820</Text></Box>
+                    <Box style={{ flex: 1 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>6.8×10⁷</Text></Box>
+                </Box>
+                <Box style={{ flexDirection: 'row', padding: '8px 10px', borderBottom: '1px solid #E5E7EB' }}>
+                    <Box style={{ width: 120 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>SP-B246</Text></Box>
+                    <Box style={{ flex: 1 }}>
+                        <Box style={{ alignSelf: 'flex-start', borderBottom: '2px solid #D9534F', paddingBottom: 1 }}>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#D9534F' }}>920</Text>
+                        </Box>
+                    </Box>
+                    <Box style={{ flex: 1 }}><Text style={{ fontSize: 14, fontWeight: 'bold', color: '#D9534F' }}>1.85×10⁷</Text></Box>
+                </Box>
+                <Box style={{ flexDirection: 'row', padding: '7px 10px', borderBottom: '1px solid #E5E7EB' }}>
+                    <Box style={{ width: 120 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>SP-B260</Text></Box>
+                    <Box style={{ flex: 1 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>860</Text></Box>
+                    <Box style={{ flex: 1 }}><Text style={{ fontSize: 14, color: '#1A2230' }}>8.85×10⁷</Text></Box>
+                </Box>
+                <Text style={{ fontSize: 13, color: '#8B97A8', lineHeight: 1.5 }}>同寿命量级下，SP 只能扛 820 MPa，烘烤件可到 860–920 MPa。</Text>
+            </Box>
+        </Box>
+    </Box>
+    <Box style={{ height: 62, padding: '0 40px', borderTop: '1px solid #D6DCE5', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>原文只给 S-N 曲线与趋势，未给疲劳极限数值；上表为四个典型断口的实测组合</Text>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>表 4　典型断口的应力-寿命（数据：原文 Fig. 8 图注）</Text>
+    </Box>
+</Slide>

@@ -1,0 +1,55 @@
+<Slide style={{ width: 1280, height: 720, background: '#FFFFFF', flexDirection: 'column' }}>
+    <Box style={{ height: 56, background: '#0024B3', padding: '0 40px', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Image src="assets/tyust-logo.png" style={{ width: 118, height: 24 }} />
+        <Text style={{ fontSize: 12, color: '#BFD0F5' }}>2 / 6</Text>
+    </Box>
+    <Box style={{ flex: 1, padding: '22px 40px 0', flexDirection: 'column', gap: 10 }}>
+        <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#0024B3' }}>实验设计</Text>
+        <Text style={{ fontSize: 19, color: '#1A2230', lineHeight: 1.5 }}>同一批材料、同一热处理，只改「喷丸/不喷丸」与「烘烤温度」两个变量。</Text>
+        <Box style={{ flexDirection: 'row', padding: '9px 14px', background: '#F7F9FC', borderBottom: '1px solid #D6DCE5' }}>
+            <Box style={{ width: 170 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>状态</Text></Box>
+            <Box style={{ width: 430 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>处理</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 15, fontWeight: 'bold', color: '#4A5568' }}>要回答什么</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '9px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 170 }}><Text style={{ fontSize: 16, color: '#1A2230' }}>STD</Text></Box>
+            <Box style={{ width: 430 }}><Text style={{ fontSize: 16, color: '#1A2230' }}>850 °C×2 h 淬火 + 160 °C×3 h 回火</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 16, color: '#4A5568' }}>基准：未喷丸的原始水平</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '9px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 170 }}><Text style={{ fontSize: 16, color: '#1A2230' }}>SP</Text></Box>
+            <Box style={{ width: 430 }}><Text style={{ fontSize: 16, color: '#1A2230' }}>STD + 喷丸，覆盖率 200%</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 16, color: '#4A5568' }}>喷丸单独带来多少收益</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '9px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 170 }}><Text style={{ fontSize: 16, color: '#1A2230' }}>SP-B200</Text></Box>
+            <Box style={{ width: 430 }}><Text style={{ fontSize: 16, color: '#1A2230' }}>SP + 200 °C×4 h 烘烤</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 16, color: '#4A5568' }}>低于上限是否烘不充分</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '10px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 170 }}><Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1A2230' }}>SP-B246</Text></Box>
+            <Box style={{ width: 430 }}>
+                <Box style={{ alignSelf: 'flex-start', flexDirection: 'row', gap: 6 }}>
+                    <Text style={{ fontSize: 16, color: '#1A2230' }}>SP +</Text>
+                    <Box style={{ borderBottom: '2px solid #D9534F', paddingBottom: 1 }}>
+                        <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#D9534F' }}>246 °C</Text>
+                    </Box>
+                    <Text style={{ fontSize: 16, color: '#1A2230' }}>×4 h 烘烤</Text>
+                </Box>
+            </Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 16, color: '#D9534F' }}>手册建议上限处的真实表现</Text></Box>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', padding: '9px 14px', borderBottom: '1px solid #E5E7EB' }}>
+            <Box style={{ width: 170 }}><Text style={{ fontSize: 16, color: '#1A2230' }}>SP-B260</Text></Box>
+            <Box style={{ width: 430 }}><Text style={{ fontSize: 16, color: '#1A2230' }}>SP + 260 °C×4 h 烘烤</Text></Box>
+            <Box style={{ flex: 1 }}><Text style={{ fontSize: 16, color: '#4A5568' }}>超过上限是否开始亏</Text></Box>
+        </Box>
+        <Box style={{ marginTop: 12, padding: '10px 14px', background: '#FFF8E1' }}>
+            <Text style={{ fontSize: 15, color: '#1A2230', lineHeight: 1.6 }}>温度 246 °C 来自波音大修手册（Rev.46）与 SAE AMS 2430U 的建议上限；保温 4 h 为作者设定。喷丸：ASH 230 铸钢丸，3 bar，50±5 mm，弧高 0.36–0.38 mmA。</Text>
+        </Box>
+    </Box>
+    <Box style={{ height: 62, padding: '0 40px', borderTop: '1px solid #D6DCE5', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>五组试样取自同一批棒材，化学成分见原文 Table 1</Text>
+        <Text style={{ fontSize: 12, color: '#8B97A8' }}>表 1　五种状态与对照逻辑（数据：原文 2.1 节）</Text>
+    </Box>
+</Slide>
