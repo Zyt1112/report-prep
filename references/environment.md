@@ -46,6 +46,14 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
 & .\scripts\setup_env.ps1 -DryRun    # 先看它要做什么
 ```
 
+**没有 git、或目标机器不能上网**：用打包好的 zip（`git archive` 生成，不含 `.git`）：
+
+1. 把 `report-prep-v1.4.zip` 拷到目标机器（U 盘、微信、内网共享都行）。
+2. 解压到 `~/.workbuddy/skills/`，**确认层级是 `skills/report-prep/SKILL.md`**，不要出现 `skills/report-prep/report-prep/`。
+3. 跳过 `git clone`，直接跑下面的自检。
+
+zip 方式没有版本历史，更新时重新拷一份覆盖即可；想以后能 `git pull` 更新，还是用 clone。
+
 然后在 WorkBuddy 里直接说“用 report-prep 给这篇论文做汇报”，或显式调用 Skill。
 
 ---

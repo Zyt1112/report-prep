@@ -118,7 +118,7 @@ python -m unittest discover -s tests -v
 
 ## 换一台电脑
 
-1. `git clone` 到用户级 Skill 目录（见上）。
+1. `git clone` 到用户级 Skill 目录（见上）；**没有 git 就把 `report-prep-v1.4.zip` 解压到 `~/.workbuddy/skills/`**，确保层级是 `skills/report-prep/SKILL.md`，不要多套一层。
 2. `python scripts/doctor.py --fix-hint`。
 3. Windows 上 `slidep` 报 `Failed to load native binding` → `scripts/setup_env.ps1 -UseVirtualDrive -Persist`。
 4. 用 `examples/deck-v3-4340m/` 生成一遍，确认能出 6 页、校徽在、中文不是方框。
