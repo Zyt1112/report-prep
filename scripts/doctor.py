@@ -154,10 +154,10 @@ def find_slidep():
     found = shutil.which("slidep")
     if found:
         return found
-    roots = [
-        Path.home() / ".workbuddy" / "binaries" / "node" / "versions",
-        Path(os.environ.get("LOCALAPPDATA", "")) / "Programs",
-    ]
+    roots = [Path.home() / ".workbuddy" / "binaries" / "node" / "versions"]
+    local = os.environ.get("LOCALAPPDATA")
+    if local:  # Windows 独有；Linux/macOS 上 Path("") 会退化成当前目录
+        roots.append(Path(local) / "Programs")
     for base in roots:
         if not base.is_dir():
             continue
