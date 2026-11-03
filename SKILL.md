@@ -186,4 +186,4 @@ Windows 上 `slidep` 报 `Failed to load native binding` 时，运行 `scripts/s
 
 ## 版本
 
-当前 **1.5**（2026-11-03）。变更历史见 [`CHANGELOG.md`](CHANGELOG.md)。
+当前 **1.6**（2026-11-03）。变更历史见 [`CHANGELOG.md`](CHANGELOG.md)。

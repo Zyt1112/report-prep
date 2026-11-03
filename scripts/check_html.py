@@ -17,6 +17,30 @@ import re
 import sys
 
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+
+# HTML5 允许省略结束标签的元素：由父元素闭合时隐式关闭，不算错误。
+# 依据 HTML Living Standard 13.1.2.4 Optional tags。
+OPTIONAL_END = {
+    "li", "dt", "dd", "p", "rt", "rp", "optgroup", "option",
+    "colgroup", "caption", "thead", "tbody", "tfoot", "tr", "td", "th",
+}
+
+# 同类元素再次开始时，前一个元素隐式结束（<li>a<li>b、<p>a<p>b）。
+IMPLICIT_CLOSE_BY_START = {
+    "li": {"li"},
+    "dt": {"dt", "dd"},
+    "dd": {"dt", "dd"},
+    "p": {"p"},
+    "option": {"option", "optgroup"},
+    "optgroup": {"optgroup"},
+    "tr": {"tr", "td", "th"},
+    "td": {"td", "th"},
+    "th": {"td", "th"},
+    "thead": {"tbody", "tfoot"},
+    "tbody": {"tbody", "tfoot"},
+    "tfoot": {"tbody"},
+}
+
 PLACEHOLDER = re.compile(r"\{\{[^{}]+\}\}")
 BRACKET_PLACEHOLDER = re.compile(r"【[^】]*】")
 
@@ -68,6 +92,9 @@ class AuditParser(HTMLParser):
         elif tag in {"thead", "tbody"} and self.tables:
             self.tables[-1][tag] += 1
         if tag not in VOID:
+            closable = IMPLICIT_CLOSE_BY_START.get(tag)
+            if closable and self.stack and self.stack[-1][0] in closable:
+                self.stack.pop()
             self.stack.append((tag, self.getpos()[0]))
 
     def handle_startendtag(self, tag, attrs):
@@ -92,7 +119,10 @@ class AuditParser(HTMLParser):
                 return
             while self.stack and self.stack[-1][0] != tag:
                 open_tag, line = self.stack.pop()
-                self.errors.append(self.line_message("<%s> from line %d closed by </%s>" % (open_tag, line, tag)))
+                if open_tag not in OPTIONAL_END:
+                    self.errors.append(
+                        self.line_message("<%s> from line %d closed by </%s>" % (open_tag, line, tag))
+                    )
         if self.stack and self.stack[-1][0] == tag:
             self.stack.pop()
         if tag == "style":
@@ -137,7 +167,8 @@ class AuditParser(HTMLParser):
     def finish(self):
         self.close()
         for tag, line in self.stack:
-            self.errors.append("line %d: unclosed <%s>" % (line, tag))
+            if tag not in OPTIONAL_END:
+                self.errors.append("line %d: unclosed <%s>" % (line, tag))
         all_tables = self.completed_tables + self.tables
         for table in all_tables:
             if not table["thead"]:

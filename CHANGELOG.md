@@ -2,6 +2,20 @@
 
 两级版本号：新增能力或改规则升次版本，纯文档修正也记在这里。
 
+## 1.6 — 2026-11-03
+
+**HTML 校验不再误报**
+
+- `check_html.py` 支持 HTML5 可省略结束标签：`<p>a<p>b`、`<ul><li>a<li>b</ul>`、表格单元格等，由父元素或下一个同类元素隐式关闭，不再判为 ERROR（依据 HTML Living Standard 13.1.2.4 Optional tags）。
+- 保留对真正错误的判定：`<div><span>x</div>` 这类跨父级闭合仍报错。
+- 测试 29 → 34 项。
+
+**工程加固**
+
+- 新增 `.github/workflows/test.yml`：push / PR 时跑单元测试、`doctor.py`、模板校验、示例链路（数字检查 → 渲染 → HTML 校验）。
+- `doctor.py` 新增版本号一致性检查：`SKILL.md`、`CHANGELOG.md`、`README.md` 三处必须相同。
+- `CHANGELOG.md` 纳入必需文件清单（22 → 23）。
+
 ## 1.5 — 2026-11-03
 
 **数字检查补漏（`scripts/check_numbers.py`）**

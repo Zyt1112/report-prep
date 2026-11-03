@@ -182,6 +182,15 @@ class NumberTests(unittest.TestCase):
         errors, _, _, _ = check_numbers.audit(evidence, self.content)
         self.assertTrue(any("E010 qualitative must use value null" in error for error in errors))
 
+    def test_source_normalize_handles_pdf_artifacts(self):
+        # Elsevier PDF 把 °C 抽成 ◦C，行尾插 ###；两者归一化后必须一致
+        source = "tempered at 750 ◦C for 180 min ### with subsequent cooling"
+        quote = "tempered at 750 °C for 180 min with subsequent cooling"
+        self.assertEqual(
+            check_numbers.normalize_source(quote),
+            check_numbers.normalize_source(source),
+        )
+
     def test_source_quote_found(self):
         source = "\n".join(item["quote"] for item in self.evidence["items"])
         errors, warnings, stats, _ = check_numbers.audit(self.evidence, self.content, source_text=source)
@@ -218,6 +227,26 @@ class HtmlTests(unittest.TestCase):
     def test_valid_named_entity(self):
         errors, _, _ = self.audit(self.document("<p>&sigma; &lt; &amp;</p>"))
         self.assertEqual([], errors)
+
+    def test_omitted_paragraph_end_tag_is_valid(self):
+        # HTML5 允许 <p>a<p>b：第二个 <p> 隐式关闭第一个
+        errors, _, _ = self.audit(self.document("<p>第一段<p>第二段"))
+        self.assertEqual([], [error for error in errors if "closed by" in error or "unclosed" in error])
+
+    def test_omitted_list_item_end_tag_is_valid(self):
+        errors, _, _ = self.audit(self.document("<ul><li>甲<li>乙</ul>"))
+        self.assertEqual([], [error for error in errors if "closed by" in error or "unclosed" in error])
+
+    def test_omitted_table_cell_end_tag_is_valid(self):
+        errors, _, _ = self.audit(
+            self.document("<table><thead><tr><th>a<th>b<tbody><tr><td>1<td>2</table>")
+        )
+        self.assertEqual([], [error for error in errors if "closed by" in error])
+
+    def test_unclosed_inline_tag_still_fails(self):
+        # <span> 不能省略结束标签，跨父级闭合必须报错
+        errors, _, _ = self.audit(self.document("<div><span>x</div>"))
+        self.assertTrue(any("closed by" in error for error in errors))
 
     def test_unknown_entity_and_bare_amp_fail(self):
         errors, _, _ = self.audit(self.document("<p>&definitelybogus; A & B</p>"))

@@ -1,0 +1,31 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 单元测试
+        run: python -m unittest discover -s tests -v
+
+      - name: 环境自检
+        run: python scripts/doctor.py --fix-hint
+
+      - name: 模板校验
+        run: python scripts/check_html.py assets/explainer.html assets/outline.html --allow-placeholders
+
+      - name: 示例链路（数字检查 → 渲染 → HTML 校验）
+        run: |
+          python scripts/check_numbers.py examples/evidence.json examples/outline.content.json
+          python scripts/render_html.py examples/outline.content.json \
+            --evidence examples/evidence.json -o /tmp/outline.html
+          python scripts/check_html.py /tmp/outline.html

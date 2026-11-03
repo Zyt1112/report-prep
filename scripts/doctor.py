@@ -31,6 +31,7 @@ REQUIRED = [
     "SKILL.md",
     "README.md",
     "HANDOVER.md",
+    "CHANGELOG.md",
     "references/pipeline.md",
     "references/structure.md",
     "references/deck-skeletons.md",
@@ -274,6 +275,36 @@ def _pad(text, width):
     return text + " " * max(1, width - _display_width(text))
 
 
+def check_version():
+    """三处版本号必须一致：SKILL.md 的当前版本、CHANGELOG 最新条目、README 最新版本行。"""
+    found = {}
+    skill = ROOT / "SKILL.md"
+    if skill.is_file():
+        match = re.search(r"当前\s*\*\*([\d.]+)\*\*", skill.read_text(encoding="utf-8"))
+        if match:
+            found["SKILL.md"] = match.group(1)
+    changelog = ROOT / "CHANGELOG.md"
+    if changelog.is_file():
+        match = re.search(r"^##\s+([\d.]+)", changelog.read_text(encoding="utf-8"), re.M)
+        if match:
+            found["CHANGELOG.md"] = match.group(1)
+    readme = ROOT / "README.md"
+    if readme.is_file():
+        match = re.search(r"^-\s+\*\*([\d.]+)\*\*", readme.read_text(encoding="utf-8"), re.M)
+        if match:
+            found["README.md"] = match.group(1)
+
+    if not found:
+        add("warn", "版本号", "未找到版本标记", "在 SKILL.md 写「当前 **x.y**」，README 写「- **x.y**（日期）」")
+        return
+    unique = set(found.values())
+    if len(unique) == 1:
+        add("ok", "版本号", "%s（%d 处一致）" % (unique.pop(), len(found)))
+    else:
+        detail = "、".join("%s=%s" % (key, value) for key, value in sorted(found.items()))
+        add("fail", "版本号", "不一致：%s" % detail, "把三处改成同一个版本号")
+
+
 def render(as_json, show_hint):
     counts = {"ok": 0, "warn": 0, "fail": 0}
     for item in RESULTS:
@@ -309,6 +340,7 @@ def main():
 
     check_python()
     check_files()
+    check_version()
     check_syntax()
     check_writable()
     check_logo()
