@@ -143,6 +143,14 @@ python scripts/render_html.py content.json --evidence evidence.json -o deliverab
 python scripts/check_html.py deliverable.html
 ```
 
+需要 PPT 时，用 `build_deck.py` 从结构化提纲 JSON 直接生成 `.slide` 页面——母版带与页型骨架由脚本统一处理，每页内容（结论、卡片、表格、图像占位）仍逐页显式给出，脚本不替你猜图、不编造数据：
+
+```bash
+python scripts/build_deck.py deck.content.json --evidence evidence.json -o deck_out --force
+```
+
+输入格式（字段、页型别名、可选区）见 `examples/deck.content.json`；生成的 `.slide` 用 `slidep upsert-dsl` 写入 pptx 后再 `lint`。
+
 输出到用户指定目录或当前工作区，不强制写桌面。WorkBuddy 中优先使用官方 PDF、PPT、Word 技能；外部命令仅在确认可用后执行。详见 `references/pipeline.md`。
 
 ## 九、交付前自检
@@ -186,4 +194,4 @@ Windows 上 `slidep` 报 `Failed to load native binding` 时，运行 `scripts/s
 
 ## 版本
 
-当前 **1.6**（2026-11-03）。变更历史见 [`CHANGELOG.md`](CHANGELOG.md)。
+当前 **1.7**（2026-11-03）。变更历史见 [`CHANGELOG.md`](CHANGELOG.md)。

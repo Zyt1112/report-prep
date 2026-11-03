@@ -150,6 +150,7 @@ python scripts/check_html.py assets/*.html --allow-placeholders
 
 ## 版本
 
+- **1.7**（2026-11-03）新增 `build_deck.py`：提纲 JSON 直接生成 `.slide`（母版带与页型骨架脚本化）；示例 `deck.content.json`；测试 40 项。
 - **1.6**（2026-11-03）HTML 校验支持 HTML5 省略结束标签（消除误报）；新增 CI 与版本号一致性检查；测试 34 项。
 - **1.5**（2026-11-03）数字检查补漏：定性证据 `qualitative`、裸数字扫描、`--source` 原文核对、`--strict`；清掉页脚承接句残留；版本记录移入 CHANGELOG。
 - **1.4**（2026-11-03）定稿版式：页数不设上限、图按内容加、边界页可选、承接句入提纲、表格强调改短下划线；新增 `doctor.py` / `setup_env.ps1` / `environment.md`；收录 6 页样张。

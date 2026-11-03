@@ -8,6 +8,7 @@ import unittest
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import build_deck
 import check_html
 import check_numbers
 import render_html
@@ -70,6 +71,65 @@ class RenderTests(unittest.TestCase):
         }
         with self.assertRaises(render_html.ContentError):
             render_html.render(data, {})
+
+
+class DeckTests(unittest.TestCase):
+    def setUp(self):
+        self.deck = build_deck.load_json(ROOT / "examples" / "deck.content.json")
+        self.evidence = build_deck.load_evidence(ROOT / "examples" / "evidence.json")
+
+    def test_example_builds_all_six_page_types(self):
+        sources = build_deck.build(self.deck, self.evidence)
+        self.assertEqual(6, len(sources))
+        self.assertTrue(all(source.startswith("<Slide") for source in sources))
+        self.assertNotIn("{{E001}}", "\n".join(sources))
+        self.assertIn("24,845", sources[1])
+        self.assertIn("48,555", sources[3])
+        self.assertIn('"6 / 6"', sources[-1])
+        self.assertIn("borderBottom: '2px solid #D9534F'", sources[3])
+
+    def test_write_deck_refuses_accidental_overwrite(self):
+        with tempfile.TemporaryDirectory() as directory:
+            targets = build_deck.write_deck(self.deck, directory, self.evidence)
+            self.assertEqual(6, len(targets))
+            self.assertTrue(all(path.is_file() for path in targets))
+            with self.assertRaises(build_deck.DeckError):
+                build_deck.write_deck(self.deck, directory, self.evidence)
+            build_deck.write_deck(self.deck, directory, self.evidence, force=True)
+
+    def test_unknown_evidence_token_fails(self):
+        deck = copy.deepcopy(self.deck)
+        deck["pages"][1]["conclusion"] = "Unknown {{E999}}"
+        with self.assertRaisesRegex(build_deck.DeckError, "unknown evidence E999"):
+            build_deck.build(deck, self.evidence)
+
+    def test_text_cannot_inject_jsx(self):
+        deck = copy.deepcopy(self.deck)
+        deck["title"] = '<script>{"alert": "&"}</script>'
+        source = build_deck.build(deck, self.evidence)[0]
+        self.assertNotIn("<script>", source)
+        self.assertIn(r"\u003cscript\u003e", source)
+        self.assertIn(r"\u0026", source)
+
+    def test_card_count_and_table_width_are_checked(self):
+        deck = copy.deepcopy(self.deck)
+        deck["pages"][1]["cards"].pop()
+        with self.assertRaisesRegex(build_deck.DeckError, "exactly 3"):
+            build_deck.build(deck, self.evidence)
+        deck = copy.deepcopy(self.deck)
+        deck["pages"][3]["rows"][0].pop()
+        with self.assertRaisesRegex(build_deck.DeckError, "match headers"):
+            build_deck.build(deck, self.evidence)
+
+    def test_cover_position_and_asset_path_are_checked(self):
+        deck = copy.deepcopy(self.deck)
+        deck["pages"][0], deck["pages"][1] = deck["pages"][1], deck["pages"][0]
+        with self.assertRaisesRegex(build_deck.DeckError, "first page must be P1"):
+            build_deck.build(deck, self.evidence)
+        deck = copy.deepcopy(self.deck)
+        deck["logo"] = "../outside.png"
+        with self.assertRaisesRegex(build_deck.DeckError, "inside the deck project"):
+            build_deck.build(deck, self.evidence)
 
 
 class NumberTests(unittest.TestCase):
