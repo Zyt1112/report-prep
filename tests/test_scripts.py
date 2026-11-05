@@ -78,24 +78,68 @@ class DeckTests(unittest.TestCase):
         self.deck = build_deck.load_json(ROOT / "examples" / "deck.content.json")
         self.evidence = build_deck.load_evidence(ROOT / "examples" / "evidence.json")
 
-    def test_example_builds_all_six_page_types(self):
+    def test_example_builds_all_eight_page_types(self):
         sources = build_deck.build(self.deck, self.evidence)
-        self.assertEqual(6, len(sources))
+        self.assertEqual(8, len(sources))
         self.assertTrue(all(source.startswith("<Slide") for source in sources))
         self.assertNotIn("{{E001}}", "\n".join(sources))
         self.assertIn("24,845", sources[1])
         self.assertIn("48,555", sources[3])
-        self.assertIn('"6 / 6"', sources[-1])
+        self.assertIn("48,555", sources[6])  # P7 柱状图数值
+        self.assertIn('"8 / 8"', sources[-1])
         self.assertIn("borderBottom: '2px solid #D9534F'", sources[3])
+
+    def test_inline_highlight_syntax_renders_red_underline(self):
+        source = self.deck and build_deck.build(self.deck, self.evidence)[1]
+        self.assertIn("borderBottom: '2px solid #D9534F'", source)
+        self.assertIn("marginLeft: 2", source)
+
+    def test_footer_banned_phrase_fails(self):
+        deck = copy.deepcopy(self.deck)
+        deck["pages"][1]["footer_left"] = "数值由证据令牌解析"
+        with self.assertRaisesRegex(build_deck.DeckError, "内部话术"):
+            build_deck.build(deck, self.evidence)
+
+    def test_brand_no_longer_defaults_to_skill_name(self):
+        deck = copy.deepcopy(self.deck)
+        deck.pop("brand", None)
+        sources = build_deck.build(deck, self.evidence)
+        joined = "\n".join(sources)
+        self.assertNotIn('"report-prep"', joined)
+
+    def test_chart_requires_axis_and_source(self):
+        deck = copy.deepcopy(self.deck)
+        deck["pages"][6].pop("axis")
+        with self.assertRaisesRegex(build_deck.DeckError, "axis"):
+            build_deck.build(deck, self.evidence)
+        deck = copy.deepcopy(self.deck)
+        deck["pages"][6].pop("source_note")
+        with self.assertRaisesRegex(build_deck.DeckError, "source_note"):
+            build_deck.build(deck, self.evidence)
+
+    def test_structure_caption_must_say_schematic(self):
+        deck = copy.deepcopy(self.deck)
+        deck["pages"][7]["caption"] = "图 1　三层同心结构（实测图）"
+        with self.assertRaisesRegex(build_deck.DeckError, "示意"):
+            build_deck.build(deck, self.evidence)
+
+    def test_write_deck_copies_default_logo(self):
+        with tempfile.TemporaryDirectory() as directory:
+            build_deck.write_deck(self.deck, evidence=self.evidence, output=directory)
+            logo = Path(directory) / "assets" / "tyust-logo.png"
+            self.assertTrue(logo.is_file())
+            for index in range(1, 9):
+                slide = (Path(directory) / "slides" / ("%02d.slide" % index)).read_text(encoding="utf-8")
+                self.assertIn('src="assets/tyust-logo.png"', slide)
 
     def test_write_deck_refuses_accidental_overwrite(self):
         with tempfile.TemporaryDirectory() as directory:
-            targets = build_deck.write_deck(self.deck, directory, self.evidence)
-            self.assertEqual(6, len(targets))
+            targets = build_deck.write_deck(self.deck, evidence=self.evidence, output=directory)
+            self.assertEqual(8, len(targets))
             self.assertTrue(all(path.is_file() for path in targets))
             with self.assertRaises(build_deck.DeckError):
-                build_deck.write_deck(self.deck, directory, self.evidence)
-            build_deck.write_deck(self.deck, directory, self.evidence, force=True)
+                build_deck.write_deck(self.deck, evidence=self.evidence, output=directory)
+            build_deck.write_deck(self.deck, evidence=self.evidence, output=directory, force=True)
 
     def test_unknown_evidence_token_fails(self):
         deck = copy.deepcopy(self.deck)

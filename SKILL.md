@@ -149,7 +149,16 @@ python scripts/check_html.py deliverable.html
 python scripts/build_deck.py deck.content.json --evidence evidence.json -o deck_out --force
 ```
 
-输入格式（字段、页型别名、可选区）见 `examples/deck.content.json`；生成的 `.slide` 用 `slidep upsert-dsl` 写入 pptx 后再 `lint`。
+**v1.8 要点**：
+
+- **页型八种**：P1 封面 / P2 三栏卡片 / P3 两栏 / P4 表格 / P5 流程链 / P6 边界 / **P7 数据图**（柱状图，数值来自 evidence）/ **P8 结构示意**（同心分层，caption 必须含「示意」）。别名 `chart` / `structure`。
+- **机构母版默认启用**：deck.json 不写 `logo` 时自动复制 Skill 内置校徽到输出目录并引用；写 `"logo": "none"` 显式关闭；`brand` 不再默认 "report-prep"——不写就是干净的顶带。
+- **内联重点标注**：任何正文文本（结论句、卡片 body、表格单元格、步骤 body）支持 `[[关键数]]` 语法，渲染为红色加粗 + 2px 红下划线，与 P4 高亮同一视觉语言。每页 1–2 处，宁缺勿滥。
+- **页脚纪律**：`footer_left` 禁止「数值由证据令牌解析」类内部话术（生成时直接报错），应写术语注解或「数据：原文 Table X」；`footer_right` 缺省自动填页型标签（如「P4 · 结果表」）。
+- **P7 数据图**：`series` 数组（2–4 组，每组 1–6 柱），`value` 必须是数字且与 evidence 的 display 一致，`axis` 标量与单位，`source_note` 标数据来源，`highlight: true` 的柱子红色。
+- **P8 结构示意**：`rings` 数组（2–4 层，由外到内），每层 `label` + `note`，`caption` 图注必须含「示意」二字。
+
+输入格式（字段、页型别名、可选区）见 `examples/deck.content.json`（含全部八种页型）；生成的 `.slide` 用 `slidep upsert-dsl` 写入 pptx 后再 `lint`。
 
 输出到用户指定目录或当前工作区，不强制写桌面。WorkBuddy 中优先使用官方 PDF、PPT、Word 技能；外部命令仅在确认可用后执行。详见 `references/pipeline.md`。
 
@@ -194,4 +203,4 @@ Windows 上 `slidep` 报 `Failed to load native binding` 时，运行 `scripts/s
 
 ## 版本
 
-当前 **1.7**（2026-11-03）。变更历史见 [`CHANGELOG.md`](CHANGELOG.md)。
+当前 **1.8**（2026-11-05）。变更历史见 [`CHANGELOG.md`](CHANGELOG.md)。

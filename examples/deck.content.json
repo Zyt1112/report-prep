@@ -4,8 +4,7 @@
   "subtitle": "怎样让每页只回答一个问题？",
   "citation": "demo-source.txt · 中性格式示例",
   "scene": "文献汇报 · 约 10 分钟",
-  "brand": "report-prep",
-  "kicker": "格 式 示 例 · 六 种 页 型",
+  "kicker": "格 式 示 例 · 八 种 页 型",
   "pages": [
     {
       "type": "P1"
@@ -17,7 +16,7 @@
       "cards": [
         {
           "title": "单一来源",
-          "body": "25 ℃ 对应 {{E001}} cycles，正文只写证据令牌。",
+          "body": "25 ℃ 对应 [[{{E001}} cycles]]，正文只写证据令牌。",
           "emphasis": "数字不在页面源码里手写。"
         },
         {
@@ -69,7 +68,7 @@
       "widths": [220, 280, 500],
       "highlights": [[1, 1]],
       "reading": "读法：只比较这两个离散条件，不把两点扩展成趋势曲线。",
-      "footer_left": "数值由证据令牌解析",
+      "footer_left": "数据：demo-source.txt 第 3–4 行",
       "footer_right": "P4 · 结果表"
     },
     {
@@ -115,6 +114,50 @@
       ],
       "footer_left": "中性示例，不含真实研究结论",
       "footer_right": "P6 · 边界页"
+    },
+    {
+      "type": "P7",
+      "section": "温度对寿命的影响",
+      "conclusion": "250 ℃ 的过渡寿命接近 25 ℃ 的两倍——温度是这个示例里唯一的变量。",
+      "series": [
+        {
+          "label": "25 ℃",
+          "values": [
+            { "caption": "过渡寿命", "value": 24845, "display": "{{E001}}" }
+          ]
+        },
+        {
+          "label": "250 ℃",
+          "values": [
+            { "caption": "过渡寿命", "value": 48555, "display": "{{E002}}", "highlight": true }
+          ]
+        }
+      ],
+      "axis": "过渡寿命 / cycles",
+      "source_note": "数据：demo-source.txt 第 3–4 行",
+      "note": "读法：两个离散条件的对照，不是趋势。",
+      "footer_left": "示例数据仅作格式演示"
+    },
+    {
+      "type": "P8",
+      "section": "结构分层示意",
+      "conclusion": "同心分层用来解释「由外到内」的结构关系，图注必须标明示意。",
+      "rings": [
+        {
+          "label": "外层",
+          "note": "示例：最外圈，浅色填充。"
+        },
+        {
+          "label": "中间层",
+          "note": "示例：第二圈，深一档填充。"
+        },
+        {
+          "label": "核心",
+          "note": "示例：圆心，最深填充。"
+        }
+      ],
+      "caption": "图 1　三层同心结构（示意，非实测）",
+      "footer_left": "示例结构，无真实对应物"
     }
   ]
 }
